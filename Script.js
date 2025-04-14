@@ -199,10 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ".birth-date"
     ).innerHTML = `Nato il: <span class="formatted-date">${formattedDate}</span>`;
 
-    // Nascondi il ruolo se è portiere, altrimenti mostralo
-    const roleElement = card.querySelector(".role");
-    roleElement.textContent = `Ruolo: ${player.ruolo}`;
-
+    
     // Aggiungi solo la bandiera senza il testo della nazionalità
     const nationalityElement = card.querySelector(".nationality");
     if (nationalityElement && player.bandiera) {
