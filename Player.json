@@ -1,0 +1,210 @@
+[
+  {
+    "nome": "Mike Maignan",
+    "data_nascita": "1995-07-03",
+    "numero_di_maglia": "16",
+    "immagine": "https://media.gqitalia.it/photos/6124e9996bd148bbda6df62b/1:1/w_2746,h_2746,c_limit/Maignan%20ok.jpg",
+    "ruolo": "Portiere",
+    "bandiera": "https://flagcdn.com/w80/fr.png"
+  },
+  {
+    "nome": "Marco Sportiello",
+    "data_nascita": "1992-05-10",
+    "numero_di_maglia": "57",
+    "immagine": "https://icdn.sempremilan.com/wp-content/uploads/2023/09/ac-milan-v-newcastle-united-fc-group-f-uefa-champions-league-2023-24-18.jpg",
+    "ruolo": "Portiere",
+    "bandiera": "https://flagcdn.com/w80/it.png"
+  },
+  {
+    "nome": "Lorenzo Torriani",
+    "data_nascita": "2005-01-31",
+    "numero_di_maglia": "96",
+    "immagine": "https://tmssl.akamaized.net/images/foto/galerie/lorenzo-torriani-milan-2024-2025-1726642252-148361.jpg",
+    "ruolo": "Portiere",
+    "bandiera": "https://flagcdn.com/w80/it.png"
+  },
+  {
+    "nome": "Fikayo Tomori",
+    "data_nascita": "1997-12-19",
+    "numero_di_maglia": "23",
+    "immagine": "https://tmssl.akamaized.net/images/foto/galerie/fikayo-tomori-ac-milan-2024-2025-1050413186-1729092986-151576.jpg",
+    "ruolo": "Difensore",
+    "bandiera": "https://flagcdn.com/w80/gb-eng.png"
+  },
+  {
+    "nome": "Malick Thiaw",
+    "data_nascita": "2001-08-08",
+    "numero_di_maglia": "28",
+    "immagine": "https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250123978.webp",
+    "ruolo": "Difensore",
+    "bandiera": "https://flagcdn.com/w80/de.png"
+  },
+  {
+    "nome": "Strahinja Pavlovic",
+    "data_nascita": "2001-05-24",
+    "numero_di_maglia": "31",
+    "immagine": "https://assets-eu-01.kc-usercontent.com/1293c890-579f-01b7-8480-902cca7de55e/9497f941-f39e-4880-98a5-2e6dde3bfea2/Pavlovic-Large.png",
+    "ruolo": "Difensore",
+    "bandiera": "https://flagcdn.com/w80/rs.png"
+  },
+  {
+    "nome": "Matteo Gabbia",
+    "data_nascita": "1999-10-21",
+    "numero_di_maglia": "46",
+    "immagine": "https://assets-eu-01.kc-usercontent.com/1293c890-579f-01b7-8480-902cca7de55e/8c9217d5-1a36-4551-ac9b-29f15e081041/Gabbia-Large.png",
+    "ruolo": "Difensore",
+    "bandiera": "https://flagcdn.com/w80/it.png"
+  },
+  {
+    "nome": "Theo Hernandez",
+    "data_nascita": "1997-10-06",
+    "numero_di_maglia": "19",
+    "immagine": "https://img.uefa.com/imgml/TP/players/1/2025/cutoff/250076126.webp",
+    "ruolo": "Difensore",
+    "bandiera": "https://flagcdn.com/w80/fr.png"
+  },
+  {
+    "nome": "Alex Gimenez",
+    "data_nascita": "2005-05-08",
+    "numero_di_maglia": "20",
+    "immagine": "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/BB1p6Ipw.img?w=768&h=512&m=6&x=431&y=186&s=184&d=184",
+    "ruolo": "Difensore",
+    "bandiera": "https://flagcdn.com/w80/es.png"
+  },
+  {
+    "nome": "Emerson Royal",
+    "data_nascita": "1999-01-14",
+    "numero_di_maglia": "22",
+    "immagine": "https://conteudo.imguol.com.br/c/esporte/b6/2024/08/12/emerson-royal-novo-reforco-do-milan-para-a-temporada-202425-1723490747353_v2_450x450.jpg",
+    "ruolo": "Difensore",
+    "bandiera": "https://flagcdn.com/w80/br.png"
+  },
+  {
+    "nome": "Kyle Walker",
+    "data_nascita": "1990-05-28",
+    "numero_di_maglia": "32",
+    "immagine": "https://uniqrenders.com/Uploads/27-1-2025/6856/preview-kyle-walker-ac-milan-serie-a-england-english-footballers-render.jpg",
+    "ruolo": "Difensore",
+    "bandiera": "https://flagcdn.com/w80/gb-eng.png"
+  },
+  {
+    "nome": "Filippo Terracciano",
+    "data_nascita": "2003-02-08",
+    "numero_di_maglia": "42",
+    "immagine": "https://milanreports.com/wp-content/uploads/2024/01/dl.beatsnoop.com-final-MatgdeRNsw-1024x683.jpg",
+    "ruolo": "Difensore",
+    "bandiera": "https://flagcdn.com/w80/it.png"
+  },
+  {
+    "nome": "Alessandro Florenzi",
+    "data_nascita": "1991-05-11",
+    "numero_di_maglia": "24",
+    "immagine": "https://assets-eu-01.kc-usercontent.com/1293c890-579f-01b7-8480-902cca7de55e/b579a585-4a38-41be-8c0f-342afe5d2d29/Florenzi-Large.png?w=undefined&h=498&dpr=2&auto=format",
+    "ruolo": "Difensore",
+    "bandiera": "https://flagcdn.com/w80/it.png"
+  },
+  {
+    "nome": "Youssouf Fofana",
+    "data_nascita": "1999-01-10",
+    "numero_di_maglia": "29",
+    "immagine": "https://assets-eu-01.kc-usercontent.com/1293c890-579f-01b7-8480-902cca7de55e/a3a5d279-e616-48aa-9e76-dd87a83b61de/Fofana-Large.png?w=undefined&h=498&dpr=2&auto=format",
+    "ruolo": "Centrocampista",
+    "bandiera": "https://flagcdn.com/w80/fr.png"
+  },
+  {
+    "nome": "Tijjani Reijnders",
+    "data_nascita": "1998-07-29",
+    "numero_di_maglia": "14",
+    "immagine": "https://cdn.areanapoli.it/immagini/notizie/big/r/reijnders_milan.jpg",
+    "ruolo": "Centrocampista",
+    "bandiera": "https://flagcdn.com/w80/nl.png"
+  },
+  {
+    "nome": "Yunuh Musah",
+    "data_nascita": "2002-11-29",
+    "numero_di_maglia": "80",
+    "immagine": "https://assets-eu-01.kc-usercontent.com/1293c890-579f-01b7-8480-902cca7de55e/103fff53-18fb-4f43-8642-75c0d8678416/Musah-Large.png?w=undefined&h=498&dpr=3&auto=format",
+    "ruolo": "Centrocampista",
+    "bandiera": "https://flagcdn.com/w80/us.png"
+  },
+  {
+    "nome": "Ruben Loftus-Cheek",
+    "data_nascita": "1996-01-23",
+    "numero_di_maglia": "8",
+    "immagine": "https://www.pazzidifanta.com/wp-content/uploads/2024/10/loftus-cheek-milan-imago-copertina-1.jpg",
+    "ruolo": "Centrocampista",
+    "bandiera": "https://flagcdn.com/w80/gb-eng.png"
+  },
+  {
+    "nome": "Warren Bondo",
+    "data_nascita": "2003-09-15",
+    "numero_di_maglia": "38",
+    "immagine": "https://staticfanpage.akamaized.net/wp-content/uploads/sites/27/2025/02/bondo-milan-gattuso-seedorf.jpg",
+    "ruolo": "Centrocampista",
+    "bandiera": "https://flagcdn.com/w80/fr.png"
+  },
+  {
+    "nome": "Riccardo Sottil",
+    "data_nascita": "1999-06-03",
+    "numero_di_maglia": "99",
+    "immagine": "https://sololaroma.it/wp-content/uploads/2025/02/Riccardo-Sottil-Milan.webp",
+    "ruolo": "Centrocampista",
+    "bandiera": "https://flagcdn.com/w80/it.png"
+  },
+  {
+    "nome": "Rafael Leao",
+    "data_nascita": "1999-06-10",
+    "numero_di_maglia": "10",
+    "immagine": "https://www.dailymilan.it/wp-content/uploads/2024/08/orizzontale.leao_.milan_.2023.24.sguardo.2100x1261.jpg",
+    "ruolo": "Attaccante",
+    "bandiera": "https://flagcdn.com/w80/pt.png"
+  },
+  {
+    "nome": "Christian Pulisic",
+    "data_nascita": "1998-09-18",
+    "numero_di_maglia": "11",
+    "immagine": "https://www.dailymilan.it/wp-content/uploads/2024/09/pulisic.inter_.milanjpg.jpg",
+    "ruolo": "Attaccante",
+    "bandiera": "https://flagcdn.com/w80/us.png"
+  },
+  {
+    "nome": "Samuel Chukwueze",
+    "data_nascita": "1999-05-22",
+    "numero_di_maglia": "21",
+    "immagine": "https://assets-eu-01.kc-usercontent.com/1293c890-579f-01b7-8480-902cca7de55e/fdde0760-356c-4b70-bc02-e04db827db5d/Chukwueze-Large.png",
+    "ruolo": "Attaccante",
+    "bandiera": "https://flagcdn.com/w80/ng.png"
+  },
+  {
+    "nome": "Joao Felix",
+    "data_nascita": "1999-11-10",
+    "numero_di_maglia": "79",
+    "immagine": "https://akcdn.detik.net.id/community/media/visual/2025/02/06/joao-felix_169.jpeg?w=700&q=90",
+    "ruolo": "Attaccante",
+    "bandiera": "https://flagcdn.com/w80/pt.png"
+  },
+  {
+    "nome": "Santiago Gimenez",
+    "data_nascita": "2001-04-18",
+    "numero_di_maglia": "7",
+    "immagine": "https://milanreports.com/wp-content/uploads/2025/02/2197993968_f-2-scaled.jpg",
+    "ruolo": "Attaccante",
+    "bandiera": "https://flagcdn.com/w80/mx.png"
+  },
+  {
+    "nome": "Tammy Abraham",
+    "data_nascita": "1997-10-02",
+    "numero_di_maglia": "90",
+    "immagine": "https://assets-eu-01.kc-usercontent.com/1293c890-579f-01b7-8480-902cca7de55e/f192aa0f-0368-466a-a999-30145b96ebba/Abraham-Large.png",
+    "ruolo": "Attaccante",
+    "bandiera": "https://flagcdn.com/w80/gb-eng.png"
+  },
+  {
+    "nome": "Luka Jovic",
+    "data_nascita": "1997-12-23",
+    "numero_di_maglia": "9",
+    "immagine": "https://images2-gazzanet.gazzettaobjects.it/bWZdm18YK792kLibZpqgxLZA5eU=/712x402/smart/www.sosfanta.com/assets/uploads/202408/d77f1635c128585e0ce9c2f757c2ea69.jpg",
+    "ruolo": "Attaccante",
+    "bandiera": "https://flagcdn.com/w80/rs.png"
+  }
+]

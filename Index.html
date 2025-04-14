@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Milan Team 2024/25</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="script.js" defer></script>
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://logodetimes.com/times/milan/logo-milan-4096.png"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="header-logo">
+        <img
+          src="https://logodetimes.com/times/milan/logo-milan-4096.png"
+          alt="A.C. Milan Logo"
+        />
+      </div>
+      <h1>A.C. Milan 2024/2025</h1>
+    </header>
+
+    <nav class="filters">
+      <div class="search-container">
+        <div class="autocomplete-wrapper">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Cerca giocatore..."
+            aria-label="Cerca giocatore"
+            autocomplete="off"
+            aria-autocomplete="list"
+            aria-controls="search-suggestions"
+          />
+          <div
+            id="search-suggestions"
+            class="search-suggestions hidden"
+            role="listbox"
+          ></div>
+        </div>
+        <button id="search-button" aria-label="Cerca">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">Tutti</button>
+        <button class="filter-btn" data-filter="Portiere">Portieri</button>
+        <button class="filter-btn" data-filter="Difensore">Difensori</button>
+        <button class="filter-btn" data-filter="Centrocampista">
+          Centrocampisti
+        </button>
+        <button class="filter-btn" data-filter="Attaccante">Attaccanti</button>
+      </div>
+    </nav>
+
+    <main>
+      <div id="loading-indicator" class="loading">
+        <div class="spinner"></div>
+        <p>Caricamento della rosa...</p>
+      </div>
+
+      <div id="no-results" class="no-results hidden">
+        <p>Nessun giocatore trovato. Prova con un'altra ricerca.</p>
+      </div>
+
+      <div id="roles-container">
+        <!-- Le sezioni dei ruoli verranno generate dinamicamente -->
+      </div>
+    </main>
+
+    <footer>
+      <div id="year"></div>
+      <div class="social-links">
+        <a
+          href="https://www.facebook.com/ACMilan"
+          aria-label="Facebook"
+          target="_blank"
+          rel="noopener"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
+            ></path>
+          </svg>
+        </a>
+        <a
+          href="https://www.instagram.com/acmilan"
+          aria-label="Instagram"
+          target="_blank"
+          rel="noopener"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+        </a>
+        <a
+          href="https://twitter.com/acmilan"
+          aria-label="Twitter"
+          target="_blank"
+          rel="noopener"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"
+            ></path>
+          </svg>
+        </a>
+      </div>
+    </footer>
+
+    <!-- Template per la card del giocatore -->
+    <template id="player-card-template">
+      <div class="card" tabindex="0">
+        <div class="card-front">
+          <img class="card-img" alt="" />
+          <div class="card-content">
+            <h3></h3>
+            <div class="maglia"></div>
+          </div>
+        </div>
+        <div class="card-back">
+          <h3></h3>
+          <p class="birth-date"></p>
+          <div class="nationality"></div>
+          <p class="role"></p>
+          <div class="maglia"></div>
+        </div>
+      </div>
+    </template>
+  </body>
+</html>
