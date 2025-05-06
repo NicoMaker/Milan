@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
             seasonCard.className = 'season-card';
             seasonCard.style.animationDelay = `${index * 0.1}s`;
 
-            // Aggiungi badge per i campioni d'Italia
-            if (season.isChampion) {
+            // Aggiungi badge per i campioni d'Italia (se isChampion è true O se position è 1)
+            if (season.isChampion || season.position === 1) {
                 const championBadge = document.createElement('div');
                 championBadge.className = 'champion-badge';
                 championBadge.innerHTML = `
@@ -123,6 +123,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         competitionItem.classList.add('competition-winner');
                     }
 
+                    // Aggiungi automaticamente winner=true per Serie A se position è 1
+                    if (competition.name === "Serie A" && season.position === 1) {
+                        competitionItem.classList.add('competition-winner');
+                    }
+
                     const competitionIcon = document.createElement('img');
                     competitionIcon.className = 'competition-icon';
                     competitionIcon.src = competition.icon;
@@ -133,7 +138,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     competitionName.textContent = competition.name;
 
                     // Aggiungi badge di vittoria se il Milan ha vinto questa competizione
-                    if (competition.winner) {
+                    // o se è Serie A e position è 1
+                    if (competition.winner || (competition.name === "Serie A" && season.position === 1)) {
                         const winnerBadge = document.createElement('div');
                         winnerBadge.className = 'winner-badge';
                         winnerBadge.title = "Vincitore";
