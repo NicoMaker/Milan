@@ -1,0 +1,473 @@
+/* Variabili CSS */
+:root {
+  --milan-red: #e53935;
+  --milan-dark-red: #c62828;
+  --milan-black: #000000;
+  --milan-gold: #ffd700;
+  --text-light: #ffffff;
+  --text-dark: #333333;
+  --card-transition: 0.3s ease;
+  --background-overlay: rgba(0, 0, 0, 0.7);
+}
+
+/* Reset e stili di base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-light);
+  min-height: 100vh;
+  position: relative;
+  background-color: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+}
+
+.background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+      135deg,
+      rgba(198, 40, 40, 0.8),
+      rgba(0, 0, 0, 0.9)
+    ),
+    url("https://www.acmilan.com/sites/default/files/styles/image_full_desktop/public/2023-05/san-siro-stadium-milan-sunset-desktop.jpg?itok=Ld-bJRQP")
+      no-repeat center center;
+  background-size: cover;
+  z-index: -1;
+}
+
+/* Header */
+header {
+  background-color: var(--milan-black);
+  padding: 1.5rem 0;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 10;
+}
+
+.logo-container {
+  margin-bottom: 1rem;
+}
+
+.logo {
+  width: 80px;
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.1);
+}
+
+header h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-light);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Main content */
+main {
+  flex: 1;
+  padding: 3rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.intro-section {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.intro-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--text-light);
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.intro-section h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background-color: var(--milan-red);
+  transition: width 0.3s ease;
+}
+
+.intro-section h2:hover::after {
+  width: 150px;
+}
+
+.intro-section p {
+  font-size: 1.1rem;
+  color: #e0e0e0;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Loading spinner */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--milan-red);
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-container p {
+  color: #e0e0e0;
+  font-size: 1.1rem;
+}
+
+/* Seasons container */
+.seasons-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.season-card {
+  background: linear-gradient(
+    135deg,
+    var(--milan-dark-red),
+    var(--milan-black)
+  );
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.season-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+}
+
+.season-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.season-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.season-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.season-card:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.season-card:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+.season-header {
+  background-color: var(--milan-black);
+  padding: 1.2rem;
+  text-align: center;
+  border-bottom: 3px solid var(--milan-red);
+}
+
+.season-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-light);
+}
+
+.season-content {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.season-info {
+  margin-bottom: 1.5rem;
+  flex: 1;
+}
+
+.position-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.position-badge {
+  background-color: var(--milan-gold);
+  color: var(--milan-black);
+  font-size: 1.8rem;
+  font-weight: 700;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.position-text {
+  font-size: 1rem;
+}
+
+.competitions-container {
+  margin-bottom: 1rem;
+}
+
+.competitions-title {
+  font-size: 0.9rem;
+  color: #e0e0e0;
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.competitions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+}
+
+.competition-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.8rem;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  position: relative;
+}
+
+.competition-item:hover {
+  transform: translateY(-3px);
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Stile per le competizioni vinte */
+.competition-winner {
+  background-color: rgba(255, 215, 0, 0.2);
+  border: 1px solid rgba(255, 215, 0, 0.5);
+}
+
+.competition-winner:hover {
+  background-color: rgba(255, 215, 0, 0.3);
+}
+
+.winner-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: var(--milan-gold);
+  color: var(--milan-black);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.competition-icon {
+  width: 36px;
+  height: 36px;
+  margin-bottom: 0.5rem;
+  object-fit: contain;
+}
+
+.competition-name {
+  font-size: 0.8rem;
+  color: #e0e0e0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.view-button {
+  background-color: var(--milan-red);
+  color: var(--text-light);
+  border: none;
+  border-radius: 6px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  margin-top: auto;
+}
+
+.view-button:hover {
+  background-color: var(--milan-dark-red);
+  transform: translateY(-3px);
+}
+
+.view-button:active {
+  transform: translateY(0);
+}
+
+/* Trophy icon for champions */
+.champion-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: var(--milan-gold);
+  color: var(--milan-black);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.trophy-icon {
+  width: 30px;
+  height: 30px;
+}
+
+/* Footer */
+footer {
+  background-color: var(--milan-black);
+  padding: 1.5rem;
+  text-align: center;
+  margin-top: 3rem;
+}
+
+footer p {
+  margin-bottom: 1rem;
+  color: #e0e0e0;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.social-links a {
+  color: var(--text-light);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-links a:hover {
+  color: var(--milan-red);
+  transform: scale(1.2);
+}
+
+/* Animazioni */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 1.8rem;
+  }
+
+  .intro-section h2 {
+    font-size: 1.6rem;
+  }
+
+  .intro-section p {
+    font-size: 1rem;
+  }
+
+  .seasons-container {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .competition-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .competition-name {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  .logo {
+    width: 60px;
+  }
+
+  .intro-section h2 {
+    font-size: 1.4rem;
+  }
+
+  .seasons-container {
+    grid-template-columns: 1fr;
+  }
+
+  .season-header h3 {
+    font-size: 1.3rem;
+  }
+
+  .competition-icon {
+    width: 28px;
+    height: 28px;
+  }
+}

@@ -1,449 +1,176 @@
-document.addEventListener("DOMContentLoaded", () => {
-  // Elementi DOM
-  const rolesContainer = document.getElementById("roles-container");
-  const loadingIndicator = document.getElementById("loading-indicator");
-  const noResults = document.getElementById("no-results");
-  const searchInput = document.getElementById("search-input");
-  const searchButton = document.getElementById("search-button");
-  const searchSuggestions = document.getElementById("search-suggestions");
-  const filterButtons = document.querySelectorAll(".filter-btn");
-  const playerCardTemplate = document.getElementById("player-card-template");
+document.addEventListener('DOMContentLoaded', function () {
+    // Aggiorna l'anno corrente nel footer
+    document.getElementById('current-year').textContent = new Date().getFullYear();
 
-  // Stato dell'applicazione
-  let allPlayers = [];
-  let currentFilter = "all";
-  let searchTerm = "";
-  let selectedSuggestionIndex = -1;
-  let visibleSuggestions = [];
+    // Elementi DOM
+    const seasonsContainer = document.getElementById('seasons-container');
+    const loadingContainer = document.getElementById('loading-container');
 
-  // Carica i dati dal file JSON
-  fetch("player.json")
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Errore nel recupero del file JSON");
-      }
-      return response.json();
-    })
-    .then((players) => {
-      // Salva tutti i giocatori
-      allPlayers = players;
+    // Carica i dati dal file JSON
+    fetch('data.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Errore nel caricamento dei dati');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Nascondi il loader
+            loadingContainer.style.display = 'none';
 
-      // Nascondi il caricamento
-      loadingIndicator.classList.add("hidden");
-
-      // Organizza e visualizza i giocatori
-      displayPlayers();
-    })
-    .catch((error) => {
-      console.error("Errore nel caricare i dati:", error);
-      loadingIndicator.innerHTML = `
-        <p>Si è verificato un errore nel caricamento dei dati.</p>
-        <p>Dettaglio: ${error.message}</p>
-        <button id="retry-button" class="filter-btn">Riprova</button>
-      `;
-
-      document.getElementById("retry-button")?.addEventListener("click", () => {
-        window.location.reload();
-      });
-    });
-
-  // Funzione per visualizzare i giocatori in base ai filtri
-  function displayPlayers() {
-    // Pulisci il contenitore
-    rolesContainer.innerHTML = "";
-
-    // Filtra i giocatori in base al ruolo e alla ricerca
-    const filteredPlayers = allPlayers.filter((player) => {
-      // Filtra per ruolo
-      const roleMatch =
-        currentFilter === "all" || player.ruolo === currentFilter;
-
-      // Filtra per termine di ricerca
-      const searchMatch =
-        searchTerm === "" ||
-        player.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        player.numero_di_maglia.toString().includes(searchTerm) ||
-        (player.nazionalita &&
-          player.nazionalita.toLowerCase().includes(searchTerm.toLowerCase()));
-
-      return roleMatch && searchMatch;
-    });
-
-    // Mostra messaggio se non ci sono risultati
-    if (filteredPlayers.length === 0) {
-      noResults.classList.remove("hidden");
-      return;
-    } else {
-      noResults.classList.add("hidden");
-    }
-
-    // Raggruppa i giocatori per ruolo
-    const playersByRole = {};
-
-    filteredPlayers.forEach((player) => {
-      const role = player.ruolo || "Sconosciuto";
-      if (!playersByRole[role]) {
-        playersByRole[role] = [];
-      }
-      playersByRole[role].push(player);
-    });
-
-    // Ordine dei ruoli
-    const roleOrder = [
-      "Portiere",
-      "Difensore",
-      "Centrocampista",
-      "Attaccante",
-      "Sconosciuto",
-    ];
-
-    // Ordina i ruoli
-    const sortedRoles = Object.keys(playersByRole).sort((a, b) => {
-      return roleOrder.indexOf(a) - roleOrder.indexOf(b);
-    });
-
-    // Crea sezioni per ogni ruolo
-    sortedRoles.forEach((role, roleIndex) => {
-      // Ordina i giocatori per numero di maglia
-      const players = playersByRole[role].sort(
-        (a, b) =>
-          Number.parseInt(a.numero_di_maglia) -
-          Number.parseInt(b.numero_di_maglia)
-      );
-
-      // Crea la sezione
-      const roleSection = document.createElement("div");
-      roleSection.classList.add("role-section");
-      roleSection.style.animationDelay = `${roleIndex * 0.2}s`;
-
-      // Aggiungi il titolo del ruolo
-      const roleTitle = document.createElement("h2");
-
-      // Pluralizza il nome del ruolo
-      let roleName = role;
-      if (role === "Portiere") roleName = "Portieri";
-      else if (role === "Difensore") roleName = "Difensori";
-      else if (role === "Centrocampista") roleName = "Centrocampisti";
-      else if (role === "Attaccante") roleName = "Attaccanti";
-
-      roleTitle.textContent = roleName;
-      roleSection.appendChild(roleTitle);
-
-      // Crea il contenitore delle carte
-      const roleCards = document.createElement("div");
-      roleCards.classList.add("role-cards");
-
-      // Aggiungi le carte per ogni giocatore
-      players.forEach((player, index) => {
-        const card = createPlayerCard(player, index, players.length);
-        roleCards.appendChild(card);
-      });
-
-      roleSection.appendChild(roleCards);
-      rolesContainer.appendChild(roleSection);
-    });
-  }
-
-  // Funzione per formattare la data in formato italiano
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    // Aggiungi lo zero davanti se il giorno è minore di 10
-    const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-    const monthNames = [
-      "Gennaio",
-      "Febbraio",
-      "Marzo",
-      "Aprile",
-      "Maggio",
-      "Giugno",
-      "Luglio",
-      "Agosto",
-      "Settembre",
-      "Ottobre",
-      "Novembre",
-      "Dicembre",
-    ];
-    const month = monthNames[date.getMonth()];
-    const year = date.getFullYear();
-
-    return `${day} ${month} ${year}`;
-  }
-
-  // Funzione modificata per creare la card del giocatore
-  function createPlayerCard(player, index, totalPlayers) {
-    // Clona il template
-    const card = playerCardTemplate.content
-      .cloneNode(true)
-      .querySelector(".card");
-
-    // Imposta l'ordine di animazione con ritardo progressivo
-    card.style.animationDelay = `${0.1 * index}s`;
-
-    // Imposta i dati del giocatore
-    const img = card.querySelector(".card-img");
-    img.src =
-      player.immagine || "https://via.placeholder.com/150?text=No+Image";
-    img.alt = player.nome;
-
-    // Imposta il nome
-    const nameElements = card.querySelectorAll("h3");
-    nameElements.forEach((el) => (el.textContent = player.nome));
-
-    // Imposta il numero di maglia
-    const magliaElements = card.querySelectorAll(".maglia");
-    magliaElements.forEach((el) => (el.textContent = player.numero_di_maglia));
-
-    // Imposta i dati aggiuntivi sul retro
-    const formattedDate = formatDate(player.data_nascita);
-    card.querySelector(
-      ".birth-date"
-    ).innerHTML = `Nato il: <span class="formatted-date">${formattedDate}</span>`;
-
-    
-    // Aggiungi solo la bandiera senza il testo della nazionalità
-    const nationalityElement = card.querySelector(".nationality");
-    if (nationalityElement && player.bandiera) {
-      const flagImg = document.createElement("img");
-      flagImg.src = player.bandiera;
-      flagImg.alt = `Bandiera ${player.nazionalita}`;
-      flagImg.classList.add("flag");
-
-      nationalityElement.innerHTML = "";
-      nationalityElement.appendChild(flagImg);
-    }
-
-    // Aggiungi l'evento per girare la carta
-    card.addEventListener("click", () => {
-      card.classList.toggle("flipped");
-    });
-
-    // Aggiungi supporto per tastiera
-    card.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        card.classList.toggle("flipped");
-      }
-    });
-
-    return card;
-  }
-
-  // Funzione migliorata per generare suggerimenti di ricerca
-  function generateSuggestions(query) {
-    if (!query || query.length < 2) {
-      searchSuggestions.classList.add("hidden");
-      return;
-    }
-
-    // Pulisci i suggerimenti precedenti
-    searchSuggestions.innerHTML = "";
-
-    // Filtra i giocatori in base alla query (migliorata per essere più inclusiva)
-    const matchingPlayers = allPlayers.filter(
-      (player) =>
-        player.nome.toLowerCase().includes(query.toLowerCase()) ||
-        player.numero_di_maglia.toString().includes(query) ||
-        (player.nazionalita &&
-          player.nazionalita.toLowerCase().includes(query.toLowerCase())) ||
-        (player.ruolo &&
-          player.ruolo.toLowerCase().includes(query.toLowerCase()))
-    );
-
-    if (matchingPlayers.length === 0) {
-      searchSuggestions.classList.add("hidden");
-      return;
-    }
-
-    // Raggruppa i giocatori per ruolo
-    const playersByRole = {};
-
-    matchingPlayers.forEach((player) => {
-      const role = player.ruolo || "Altro";
-      if (!playersByRole[role]) {
-        playersByRole[role] = [];
-      }
-      playersByRole[role].push(player);
-    });
-
-    // Ordine dei ruoli
-    const roleOrder = [
-      "Portiere",
-      "Difensore",
-      "Centrocampista",
-      "Attaccante",
-      "Altro",
-    ];
-
-    // Ordina i ruoli
-    const sortedRoles = Object.keys(playersByRole).sort((a, b) => {
-      return roleOrder.indexOf(a) - roleOrder.indexOf(b);
-    });
-
-    // Resetta l'array dei suggerimenti visibili
-    visibleSuggestions = [];
-
-    // Crea i suggerimenti per ogni ruolo
-    sortedRoles.forEach((role) => {
-      // Crea l'intestazione della categoria
-      const categoryHeader = document.createElement("div");
-      categoryHeader.classList.add("suggestion-category");
-
-      // Pluralizza il nome del ruolo
-      let roleName = role;
-      if (role === "Portiere") roleName = "Portieri";
-      else if (role === "Difensore") roleName = "Difensori";
-      else if (role === "Centrocampista") roleName = "Centrocampisti";
-      else if (role === "Attaccante") roleName = "Attaccanti";
-
-      categoryHeader.textContent = roleName;
-      searchSuggestions.appendChild(categoryHeader);
-
-      // Aggiungi i giocatori di questa categoria
-      playersByRole[role].forEach((player) => {
-        const suggestionItem = document.createElement("div");
-        suggestionItem.classList.add("suggestion-item");
-        suggestionItem.setAttribute("role", "option");
-        suggestionItem.setAttribute("tabindex", "-1");
-        suggestionItem.setAttribute("data-player-name", player.nome);
-
-        // Aggiungi il numero di maglia
-        const jerseyNumber = document.createElement("span");
-        jerseyNumber.classList.add("suggestion-jersey");
-        jerseyNumber.textContent = player.numero_di_maglia;
-        suggestionItem.appendChild(jerseyNumber);
-
-        // Aggiungi il nome del giocatore
-        const playerName = document.createElement("span");
-        playerName.classList.add("suggestion-name");
-        playerName.textContent = player.nome;
-        suggestionItem.appendChild(playerName);
-
-        // Aggiungi la nazionalità e la bandiera se disponibili (con dimensioni ridotte)
-        if (player.nazionalita && player.bandiera) {
-          const nationalityContainer = document.createElement("span");
-          nationalityContainer.classList.add("suggestion-nationality");
-
-          const flagImg = document.createElement("img");
-          flagImg.src = player.bandiera;
-          flagImg.alt = `Bandiera ${player.nazionalita}`;
-          flagImg.classList.add("suggestion-flag");
-
-          nationalityContainer.appendChild(flagImg);
-          suggestionItem.appendChild(nationalityContainer);
-        }
-
-        // Aggiungi l'evento click
-        suggestionItem.addEventListener("click", () => {
-          searchInput.value = player.nome;
-          searchSuggestions.classList.add("hidden");
-          performSearch();
+            // Genera le card delle stagioni
+            renderSeasons(data.seasons);
+        })
+        .catch(error => {
+            console.error('Errore:', error);
+            loadingContainer.innerHTML = `
+                <p>Errore nel caricamento dei dati. Riprova più tardi.</p>
+                <button onclick="location.reload()" class="retry-button">Riprova</button>
+            `;
         });
 
-        searchSuggestions.appendChild(suggestionItem);
-        visibleSuggestions.push(suggestionItem);
-      });
-    });
+    // Funzione per generare le card delle stagioni
+    function renderSeasons(seasons) {
+        seasons.forEach((season, index) => {
+            // Crea la card della stagione
+            const seasonCard = document.createElement('div');
+            seasonCard.className = 'season-card';
+            seasonCard.style.animationDelay = `${index * 0.1}s`;
 
-    // Mostra i suggerimenti
-    searchSuggestions.classList.remove("hidden");
-    selectedSuggestionIndex = -1;
-  }
+            // Aggiungi badge per i campioni d'Italia
+            if (season.isChampion) {
+                const championBadge = document.createElement('div');
+                championBadge.className = 'champion-badge';
+                championBadge.innerHTML = `
+                    <svg class="trophy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                        <path d="M4 22h16"></path>
+                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                        <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                    </svg>
+                `;
+                championBadge.title = "Campione d'Italia";
+                seasonCard.appendChild(championBadge);
+            }
 
-  // Gestione dell'input di ricerca
-  searchInput.addEventListener("input", () => {
-    const query = searchInput.value.trim();
-    generateSuggestions(query);
-  });
+            // Crea l'header della stagione
+            const seasonHeader = document.createElement('div');
+            seasonHeader.className = 'season-header';
+            seasonHeader.innerHTML = `<h3>Stagione ${season.year}</h3>`;
 
-  // Gestione del focus sull'input di ricerca
-  searchInput.addEventListener("focus", () => {
-    if (searchInput.value.trim().length >= 2) {
-      generateSuggestions(searchInput.value.trim());
+            // Crea il contenuto della stagione
+            const seasonContent = document.createElement('div');
+            seasonContent.className = 'season-content';
+
+            // Crea le informazioni della stagione
+            const seasonInfo = document.createElement('div');
+            seasonInfo.className = 'season-info';
+
+            // Aggiungi la posizione in campionato
+            const positionContainer = document.createElement('div');
+            positionContainer.className = 'position-container';
+
+            const positionBadge = document.createElement('div');
+            positionBadge.className = 'position-badge';
+            positionBadge.textContent = season.position;
+
+            const positionText = document.createElement('div');
+            positionText.className = 'position-text';
+
+            // Testo in base alla posizione
+            let positionDescription;
+            if (season.position === 1) {
+                positionDescription = "Campione d'Italia";
+            } else if (season.position === 2) {
+                positionDescription = "Secondo posto in Serie A";
+            } else if (season.position === 3) {
+                positionDescription = "Terzo posto in Serie A";
+            } else {
+                positionDescription = `${season.position}° posto in Serie A`;
+            }
+
+            positionText.textContent = positionDescription;
+
+            positionContainer.appendChild(positionBadge);
+            positionContainer.appendChild(positionText);
+            seasonInfo.appendChild(positionContainer);
+
+            // Aggiungi le competizioni
+            if (season.competitions && season.competitions.length > 0) {
+                const competitionsContainer = document.createElement('div');
+                competitionsContainer.className = 'competitions-container';
+
+                const competitionsTitle = document.createElement('div');
+                competitionsTitle.className = 'competitions-title';
+                competitionsTitle.textContent = 'Competizioni';
+                competitionsContainer.appendChild(competitionsTitle);
+
+                const competitionsGrid = document.createElement('div');
+                competitionsGrid.className = 'competitions-grid';
+
+                // Sempre 2 colonne per una migliore visualizzazione
+                competitionsGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+
+                // Aggiungi ogni competizione
+                season.competitions.forEach(competition => {
+                    const competitionItem = document.createElement('div');
+                    competitionItem.className = 'competition-item';
+
+                    // Aggiungi classe speciale se il Milan ha vinto questa competizione
+                    if (competition.winner) {
+                        competitionItem.classList.add('competition-winner');
+                    }
+
+                    const competitionIcon = document.createElement('img');
+                    competitionIcon.className = 'competition-icon';
+                    competitionIcon.src = competition.icon;
+                    competitionIcon.alt = competition.name;
+
+                    const competitionName = document.createElement('span');
+                    competitionName.className = 'competition-name';
+                    competitionName.textContent = competition.name;
+
+                    // Aggiungi badge di vittoria se il Milan ha vinto questa competizione
+                    if (competition.winner) {
+                        const winnerBadge = document.createElement('div');
+                        winnerBadge.className = 'winner-badge';
+                        winnerBadge.title = "Vincitore";
+                        winnerBadge.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.12"></path>
+                                <path d="M15 7a4 4 0 1 0-8 0"></path>
+                                <path d="M17.8 11.8c.4-.7.7-1.5.7-2.3a5.5 5.5 0 0 0-5.5-5.5c0-1.4-1.1-2.5-2.5-2.5S8 2.6 8 4a5.5 5.5 0 0 0-5.5 5.5c0 .8.3 1.6.7 2.3"></path>
+                            </svg>
+                        `;
+                        competitionItem.appendChild(winnerBadge);
+                    }
+
+                    competitionItem.appendChild(competitionIcon);
+                    competitionItem.appendChild(competitionName);
+                    competitionsGrid.appendChild(competitionItem);
+                });
+
+                competitionsContainer.appendChild(competitionsGrid);
+                seasonInfo.appendChild(competitionsContainer);
+            }
+
+            // Crea il pulsante per visualizzare la rosa
+            const viewButton = document.createElement('a');
+            viewButton.className = 'view-button';
+            viewButton.href = season.link;
+            viewButton.textContent = 'Visualizza Rosa';
+
+            // Assembla la card
+            seasonContent.appendChild(seasonInfo);
+            seasonContent.appendChild(viewButton);
+
+            seasonCard.appendChild(seasonHeader);
+            seasonCard.appendChild(seasonContent);
+
+            // Aggiungi la card al container
+            seasonsContainer.appendChild(seasonCard);
+        });
     }
-  });
-
-  // Chiudi i suggerimenti quando si clicca fuori
-  document.addEventListener("click", (e) => {
-    if (!searchSuggestions.contains(e.target) && e.target !== searchInput) {
-      searchSuggestions.classList.add("hidden");
-    }
-  });
-
-  // Gestione della navigazione con tastiera
-  searchInput.addEventListener("keydown", (e) => {
-    // Se i suggerimenti non sono visibili, non fare nulla
-    if (searchSuggestions.classList.contains("hidden")) {
-      return;
-    }
-
-    // Naviga tra i suggerimenti con i tasti freccia
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      selectedSuggestionIndex = Math.min(
-        selectedSuggestionIndex + 1,
-        visibleSuggestions.length - 1
-      );
-      updateSelectedSuggestion();
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      selectedSuggestionIndex = Math.max(selectedSuggestionIndex - 1, -1);
-      updateSelectedSuggestion();
-    } else if (e.key === "Enter" && selectedSuggestionIndex >= 0) {
-      e.preventDefault();
-      const selectedSuggestion = visibleSuggestions[selectedSuggestionIndex];
-      searchInput.value = selectedSuggestion.getAttribute("data-player-name");
-      searchSuggestions.classList.add("hidden");
-      performSearch();
-    } else if (e.key === "Escape") {
-      e.preventDefault();
-      searchSuggestions.classList.add("hidden");
-    }
-  });
-
-  // Aggiorna la selezione visiva dei suggerimenti
-  function updateSelectedSuggestion() {
-    visibleSuggestions.forEach((suggestion, index) => {
-      if (index === selectedSuggestionIndex) {
-        suggestion.classList.add("selected");
-        suggestion.scrollIntoView({ block: "nearest" });
-      } else {
-        suggestion.classList.remove("selected");
-      }
-    });
-  }
-
-  // Gestione della ricerca
-  searchButton.addEventListener("click", performSearch);
-  searchInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && selectedSuggestionIndex === -1) {
-      performSearch();
-    }
-  });
-
-  function performSearch() {
-    searchTerm = searchInput.value.trim();
-    searchSuggestions.classList.add("hidden");
-    displayPlayers();
-  }
-
-  // Gestione dei filtri
-  filterButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      // Rimuovi la classe active da tutti i pulsanti
-      filterButtons.forEach((btn) => btn.classList.remove("active"));
-
-      // Aggiungi la classe active al pulsante cliccato
-      button.classList.add("active");
-
-      // Imposta il filtro corrente
-      currentFilter = button.dataset.filter;
-
-      // Aggiorna la visualizzazione
-      displayPlayers();
-    });
-  });
-
-  // Aggiorna l'anno nel footer
-  document.getElementById("year").innerHTML = `
-     <p>&copy; ${new Date().getFullYear()} A.C. Milan - Tutti i diritti riservati</p>`;
 });

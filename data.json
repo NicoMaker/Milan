@@ -1,0 +1,32 @@
+{
+  "seasons": [
+    {
+      "year": "2024-2025",
+      "position": 9,
+      "isChampion": false,
+      "competitions": [
+        {
+          "name": "Serie A",
+          "icon": "https://th.bing.com/th/id/OIP.kTPxa3anLybfylmxp7U_VwHaEK?cb=iwc1&rs=1&pid=ImgDetMain",
+          "winner": false
+        },
+        {
+          "name": "Champions League",
+          "icon": "https://th.bing.com/th/id/OIP.Tte3xHMyJyKnVCgZXSfiVQHaHa?cb=iwc1&rs=1&pid=ImgDetMain",
+          "winner": false
+        },
+        {
+          "name": "Coppa Italia",
+          "icon": "https://th.bing.com/th/id/OIP.fhJSRKLhAmVbC35s_ZQu0gHaFj?cb=iwc1&rs=1&pid=ImgDetMain",
+          "winner": false
+        },
+        {
+          "name": "Supercoppa",
+          "icon": "https://th.bing.com/th/id/OIP.wXIt6r7hdErN3ScE6gCeugHaFm?cb=iwc1&rs=1&pid=ImgDetMain",
+          "winner": true
+        }
+      ],
+      "link": "Stagione/2024-2025/Index.html"
+    }
+  ]
+}
