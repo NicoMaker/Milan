@@ -6,8 +6,7 @@
       "competitions": [
         {
           "name": "Serie A",
-          "icon": "https://th.bing.com/th/id/OIP.kTPxa3anLybfylmxp7U_VwHaEK?cb=iwc1&rs=1&pid=ImgDetMain",
-          "winner": false
+          "icon": "https://th.bing.com/th/id/OIP.kTPxa3anLybfylmxp7U_VwHaEK?cb=iwc1&rs=1&pid=ImgDetMain"
         },
         {
           "name": "Champions League",
