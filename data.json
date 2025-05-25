@@ -2,7 +2,7 @@
   "seasons": [
     {
       "year": "2024-2025",
-      "position": 9,
+      "position": 8,
       "competitions": [
         {
           "name": "Serie A",
@@ -10,7 +10,7 @@
         },
         {
           "name": "Champions League",
-          "icon": "https://th.bing.com/th/id/OIP.Tte3xHMyJyKnVCgZXSfiVQHaHa?cb=iwc1&rs=1&pid=ImgDetMain",
+          "icon": "https://th.bing.com/th/id/OIP.78ygX7h8FqLFoFDY9eiXiAHaGD?cb=iwc2&rs=1&pid=ImgDetMain",
           "winner": false
         },
         {
@@ -19,7 +19,7 @@
           "winner": false
         },
         {
-          "name": "Supercoppa",
+          "name": "Supercoppa Italiana",
           "icon": "https://th.bing.com/th/id/OIP.wXIt6r7hdErN3ScE6gCeugHaFm?cb=iwc1&rs=1&pid=ImgDetMain",
           "winner": true
         }

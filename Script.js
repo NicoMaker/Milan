@@ -83,11 +83,8 @@ document.addEventListener("DOMContentLoaded", () => {
             let positionDescription
             if (season.position === 1) {
                 positionDescription = "Campione d'Italia"
-            } else if (season.position === 2) {
-                positionDescription = "Secondo posto in Serie A"
-            } else if (season.position === 3) {
-                positionDescription = "Terzo posto in Serie A"
-            } else {
+            }
+            else {
                 positionDescription = `${season.position}° posto in Serie A`
             }
 
