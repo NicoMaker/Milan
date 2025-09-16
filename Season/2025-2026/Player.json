@@ -29,7 +29,7 @@
     "numero_di_maglia": "5",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/490384-1730126791.jpg?lm=1",
     "ruolo": "Difensore",
-    "bandiera": "https://flagcdn.com/w80/gb-eng.png"
+    "bandiera": "https://flagcdn.com/w80/be.png"
   },
   {
     "nome": "Fikayo Tomori",
@@ -45,7 +45,7 @@
     "numero_di_maglia": "31",
     "immagine": "https://assets-eu-01.kc-usercontent.com/1293c890-579f-01b7-8480-902cca7de55e/9497f941-f39e-4880-98a5-2e6dde3bfea2/Pavlovic-Large.png",
     "ruolo": "Difensore",
-    "bandiera": "https://flagcdn.com/w80/sr.png"
+    "bandiera": "https://flagcdn.com/w80/rs.png"
   },
   {
     "nome": "Matteo Gabbia",
@@ -61,7 +61,7 @@
     "numero_di_maglia": "27",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/897423-1724771146.jpg?lm=1",
     "ruolo": "Difensore",
-    "bandiera": "https://flagcdn.com/w80/ni.png"
+    "bandiera": "https://flagcdn.com/w80/de.png"
   },
   {
     "nome": "Pervis Estupinan",
@@ -69,7 +69,7 @@
     "numero_di_maglia": "20",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/349599-1668498118.jpg?lm=1",
     "ruolo": "Difensore",
-    "bandiera": "https://flagcdn.com/w80/es.png"
+    "bandiera": "https://flagcdn.com/w80/ec.png"
   },
   {
     "nome": "Davide Bartesaghi",
@@ -93,7 +93,7 @@
     "numero_di_maglia": "30",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/608172-1734438792.jpg?lm=1",
     "ruolo": "Centrocampista",
-    "bandiera": "https://flagcdn.com/w80/it.png"
+    "bandiera": "https://flagcdn.com/w80/ch.png"
   },
   {
     "nome": "Samuele Ricci",
@@ -114,18 +114,18 @@
   {
     "nome": "Adrien Rabiot",
     "data_nascita": "1995-04-03",
-    "numero_di_maglia": "14",
+    "numero_di_maglia": "12",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/182913-1681462009.jpg?lm=1",
     "ruolo": "Centrocampista",
-    "bandiera": "https://flagcdn.com/w80/nl.png"
+    "bandiera": "https://flagcdn.com/w80/fr.png"
   },
   {
     "nome": "Luka Modric",
     "data_nascita": "1985-09-09",
-    "numero_di_maglia": "40",
+    "numero_di_maglia": "14",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/27992-1687776160.jpg?lm=1",
     "ruolo": "Centrocampista",
-    "bandiera": "https://flagcdn.com/w80/us.png"
+    "bandiera": "https://flagcdn.com/w80/hr.png"
   },
   {
     "nome": "Ruben Loftus-Cheek",
@@ -157,7 +157,7 @@
     "numero_di_maglia": "56",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/381950-1757604189.jpg?lm=1",
     "ruolo": "Centrocampista",
-    "bandiera": "https://flagcdn.com/w80/ng.png"
+    "bandiera": "https://flagcdn.com/w80/be.png"
   },
   {
     "nome": "Santiago Gimenez",
@@ -173,6 +173,6 @@
     "numero_di_maglia": "18",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/344381-1663686834.jpg?lm=1",
     "ruolo": "Attaccante",
-    "bandiera": "https://flagcdn.com/w80/gb-eng.png"
+    "bandiera": "https://flagcdn.com/w80/fr.png"
   }
 ]
