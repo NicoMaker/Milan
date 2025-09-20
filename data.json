@@ -1,6 +1,27 @@
 {
   "seasons": [
     {
+      "year": "2025-2026",
+      "position": 5,
+      "competitions": [
+        {
+          "name": "Serie A",
+          "icon": "https://th.bing.com/th/id/OIP.kTPxa3anLybfylmxp7U_VwHaEK?cb=iwc1&rs=1&pid=ImgDetMain"
+        },
+        {
+          "name": "Coppa Italia",
+          "icon": "https://th.bing.com/th/id/OIP.fhJSRKLhAmVbC35s_ZQu0gHaFj?cb=iwc1&rs=1&pid=ImgDetMain",
+          "winner": false
+        },
+        {
+          "name": "Supercoppa Italiana",
+          "icon": "https://th.bing.com/th/id/OIP.wXIt6r7hdErN3ScE6gCeugHaFm?cb=iwc1&rs=1&pid=ImgDetMain",
+          "winner": false
+        }
+      ],
+      "link": "Season/2025-2026/Index.html"
+    },
+    {
       "year": "2024-2025",
       "position": 8,
       "competitions": [
@@ -25,27 +46,6 @@
         }
       ],
       "link": "Season/2024-2025/Index.html"
-    },
-    {
-      "year": "2025-2026",
-      "position": 5,
-      "competitions": [
-        {
-          "name": "Serie A",
-          "icon": "https://th.bing.com/th/id/OIP.kTPxa3anLybfylmxp7U_VwHaEK?cb=iwc1&rs=1&pid=ImgDetMain"
-        },
-        {
-          "name": "Coppa Italia",
-          "icon": "https://th.bing.com/th/id/OIP.fhJSRKLhAmVbC35s_ZQu0gHaFj?cb=iwc1&rs=1&pid=ImgDetMain",
-          "winner": false
-        },
-        {
-          "name": "Supercoppa Italiana",
-          "icon": "https://th.bing.com/th/id/OIP.wXIt6r7hdErN3ScE6gCeugHaFm?cb=iwc1&rs=1&pid=ImgDetMain",
-          "winner": false
-        }
-      ],
-      "link": "Season/2025-2026/Index.html"
     }
   ]
 }
