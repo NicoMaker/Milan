@@ -174,5 +174,13 @@
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/344381-1663686834.jpg?lm=1",
     "ruolo": "Attaccante",
     "bandiera": "https://flagcdn.com/w80/fr.png"
+  },
+  {
+    "nome":"Niclas Füllkrug",
+    "data_nascita":"1993-02-09",
+    "numero_di_maglia":"9",
+    "immagine":"https://images.daznservices.com/di/library/DAZN_News/24/23/deutschland-fullkrug-testspiel-28032023_tuqo1jbidxzj1l3in75ic0mf6.jpg?t=279203887",
+    "ruolo":"Attaccante",
+    "bandiera":"https://flagcdn.com/w80/de.png"
   }
 ]
