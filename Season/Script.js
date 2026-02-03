@@ -16,10 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let selectedSuggestionIndex = -1;
   let visibleSuggestions = [];
 
-  // Attiva visivamente tutti i pulsanti filtro all'avvio
-  filterButtons.forEach((btn) => {
-    btn.classList.add("active");
-  });
+  // Attiva visivamente solo il pulsante "Tutti" all'avvio
+  const allButton = document.querySelector('.filter-btn[data-filter="all"]');
+  if (allButton) {
+    allButton.classList.add("active");
+  }
 
   // Carica i dati dal file JSON
   fetch("player.json")
@@ -459,13 +460,17 @@ document.addEventListener("DOMContentLoaded", () => {
           // Attivo "Tutti" e seleziono tutti i ruoli
           button.classList.add("active");
           selectedFilters = ["Portiere", "Difensore", "Centrocampista", "Attaccante"];
-          // Attiva tutti gli altri bottoni
+          // Disattiva visivamente tutti gli altri bottoni
           filterButtons.forEach((btn) => {
-            btn.classList.add("active");
+            if (btn.dataset.filter !== "all") {
+              btn.classList.remove("active");
+            }
           });
         }
       } else {
         // Clicco su un ruolo specifico
+        const allButton = document.querySelector('[data-filter="all"]');
+        
         if (button.classList.contains("active")) {
           // Rimuovo il ruolo dai filtri
           button.classList.remove("active");
@@ -474,19 +479,41 @@ document.addEventListener("DOMContentLoaded", () => {
             selectedFilters.splice(index, 1);
           }
           // Disattivo "Tutti" se un ruolo viene deselezionato
-          const allButton = document.querySelector('[data-filter="all"]');
           allButton.classList.remove("active");
         } else {
-          // Aggiungo il ruolo ai filtri
-          button.classList.add("active");
-          selectedFilters.push(filter);
-          
-          // Se tutti i ruoli sono selezionati, attivo anche "Tutti"
-          const allRoles = ["Portiere", "Difensore", "Centrocampista", "Attaccante"];
-          const allSelected = allRoles.every(role => selectedFilters.includes(role));
-          if (allSelected) {
-            const allButton = document.querySelector('[data-filter="all"]');
-            allButton.classList.add("active");
+          // Se "Tutti" è attivo, posso deselezionare questo ruolo
+          if (allButton.classList.contains("active")) {
+            // Rimuovo il ruolo dai filtri
+            const index = selectedFilters.indexOf(filter);
+            if (index > -1) {
+              selectedFilters.splice(index, 1);
+            }
+            // Disattivo "Tutti"
+            allButton.classList.remove("active");
+            // Attivo visivamente tutti gli altri ruoli tranne questo
+            filterButtons.forEach((btn) => {
+              const btnFilter = btn.dataset.filter;
+              if (btnFilter !== "all" && btnFilter !== filter && selectedFilters.includes(btnFilter)) {
+                btn.classList.add("active");
+              }
+            });
+          } else {
+            // Aggiungo il ruolo ai filtri
+            button.classList.add("active");
+            selectedFilters.push(filter);
+            
+            // Se tutti i ruoli sono selezionati, attivo solo "Tutti" e disattivo gli altri
+            const allRoles = ["Portiere", "Difensore", "Centrocampista", "Attaccante"];
+            const allSelected = allRoles.every(role => selectedFilters.includes(role));
+            if (allSelected) {
+              allButton.classList.add("active");
+              // Disattiva visivamente tutti i ruoli specifici
+              filterButtons.forEach((btn) => {
+                if (btn.dataset.filter !== "all") {
+                  btn.classList.remove("active");
+                }
+              });
+            }
           }
         }
       }
