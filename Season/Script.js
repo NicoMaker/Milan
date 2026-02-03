@@ -11,10 +11,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Stato dell'applicazione
   let allPlayers = [];
-  let currentFilter = "all";
+  let selectedFilters = ["Portiere", "Difensore", "Centrocampista", "Attaccante"]; // Array per i filtri selezionati - inizializzato con tutti i ruoli
   let searchTerm = "";
   let selectedSuggestionIndex = -1;
   let visibleSuggestions = [];
+
+  // Attiva visivamente tutti i pulsanti filtro all'avvio
+  filterButtons.forEach((btn) => {
+    btn.classList.add("active");
+  });
 
   // Carica i dati dal file JSON
   fetch("player.json")
@@ -52,11 +57,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // Pulisci il contenitore
     rolesContainer.innerHTML = "";
 
+    // Se nessun filtro selezionato, non mostrare nulla
+    if (selectedFilters.length === 0) {
+      noResults.classList.remove("hidden");
+      noResults.querySelector("p").textContent = "Seleziona almeno un ruolo per visualizzare i giocatori.";
+      return;
+    }
+
     // Filtra i giocatori in base al ruolo e alla ricerca
     const filteredPlayers = allPlayers.filter((player) => {
       // Filtra per ruolo
-      const roleMatch =
-        currentFilter === "all" || player.ruolo === currentFilter;
+      const roleMatch = selectedFilters.includes(player.ruolo);
 
       // Filtra per termine di ricerca
       const searchMatch =
@@ -72,6 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Mostra messaggio se non ci sono risultati
     if (filteredPlayers.length === 0) {
       noResults.classList.remove("hidden");
+      noResults.querySelector("p").textContent = "Nessun giocatore trovato. Prova con un'altra ricerca.";
       return;
     } else {
       noResults.classList.add("hidden");
@@ -426,17 +438,58 @@ document.addEventListener("DOMContentLoaded", () => {
     displayPlayers();
   }
 
-  // Gestione dei filtri
+  // Gestione dei filtri con selezione multipla
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      // Rimuovi la classe active da tutti i pulsanti
-      filterButtons.forEach((btn) => btn.classList.remove("active"));
+      const filter = button.dataset.filter;
 
-      // Aggiungi la classe active al pulsante cliccato
-      button.classList.add("active");
-
-      // Imposta il filtro corrente
-      currentFilter = button.dataset.filter;
+      if (filter === "all") {
+        // Se clicco su "Tutti"
+        if (button.classList.contains("active")) {
+          // Se "Tutti" è già attivo, lo disattivo e deseleziono tutto
+          button.classList.remove("active");
+          selectedFilters = [];
+          // Rimuovi active da tutti gli altri bottoni
+          filterButtons.forEach((btn) => {
+            if (btn.dataset.filter !== "all") {
+              btn.classList.remove("active");
+            }
+          });
+        } else {
+          // Attivo "Tutti" e seleziono tutti i ruoli
+          button.classList.add("active");
+          selectedFilters = ["Portiere", "Difensore", "Centrocampista", "Attaccante"];
+          // Attiva tutti gli altri bottoni
+          filterButtons.forEach((btn) => {
+            btn.classList.add("active");
+          });
+        }
+      } else {
+        // Clicco su un ruolo specifico
+        if (button.classList.contains("active")) {
+          // Rimuovo il ruolo dai filtri
+          button.classList.remove("active");
+          const index = selectedFilters.indexOf(filter);
+          if (index > -1) {
+            selectedFilters.splice(index, 1);
+          }
+          // Disattivo "Tutti" se un ruolo viene deselezionato
+          const allButton = document.querySelector('[data-filter="all"]');
+          allButton.classList.remove("active");
+        } else {
+          // Aggiungo il ruolo ai filtri
+          button.classList.add("active");
+          selectedFilters.push(filter);
+          
+          // Se tutti i ruoli sono selezionati, attivo anche "Tutti"
+          const allRoles = ["Portiere", "Difensore", "Centrocampista", "Attaccante"];
+          const allSelected = allRoles.every(role => selectedFilters.includes(role));
+          if (allSelected) {
+            const allButton = document.querySelector('[data-filter="all"]');
+            allButton.classList.add("active");
+          }
+        }
+      }
 
       // Aggiorna la visualizzazione
       displayPlayers();
