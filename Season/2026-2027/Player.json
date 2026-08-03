@@ -43,7 +43,7 @@
     "nome": "Sankhoun Diawara",
     "data_nascita": "2006-01-13",
     "numero_di_maglia": "13",
-    "immagine": "https://via.placeholder.com/150/000000/FFFFFF?text=No+Image",
+    "immagine": "https://image-service.onefootball.com/transform?w=280&h=210&dpr=2&image=https%3A%2F%2Fassets-eu-01.kc-usercontent.com%3A443%2F006f7528-416b-01e4-8ef2-ab6ab3f4e177%2F240fb990-8d46-4684-8020-755f925dbefc%2F2026.07.29-CU-Diawara-orizzontale.jpg",
     "ruolo": "Difensore",
     "bandiera": "https://flagcdn.com/w80/ml.png"
   },
@@ -91,7 +91,7 @@
     "nome": "Mario Gila",
     "data_nascita": "2000-08-29",
     "numero_di_maglia": "34",
-    "immagine": "https://via.placeholder.com/150/000000/FFFFFF?text=No+Image",
+    "immagine": "https://i.eurosport.com/2026/07/10/image-69929de1-f7b7-4f5c-b56b-748b446de5ac-85-2560-1440.jpeg",
     "ruolo": "Difensore",
     "bandiera": "https://flagcdn.com/w80/es.png"
   },
@@ -115,7 +115,7 @@
     "nome": "Ruben Loftus-Cheek",
     "data_nascita": "1996-01-23",
     "numero_di_maglia": "8",
-    "immagine": "https://www.pazzidifanta.com/wp-content/uploads/2024/10/loftus-cheek-milan-imago-copertina-1.jpg",
+    "immagine": "https://www.lottomatica.sport/app/uploads/sites/2/2024/08/2024-08-04_ruben_loftus_cheek_milan.jpg",
     "ruolo": "Centrocampista",
     "bandiera": "https://flagcdn.com/w80/gb-eng.png"
   },
@@ -155,7 +155,7 @@
     "nome": "Christian Comotto",
     "data_nascita": "2008-04-25",
     "numero_di_maglia": "28",
-    "immagine": "https://via.placeholder.com/150/000000/FFFFFF?text=No+Image",
+    "immagine": "https://i.eurosport.com/2025/07/31/image-89e2ad3c-c53e-4a13-ba3c-90a58bdbb906-85-2560-1440.jpeg",
     "ruolo": "Centrocampista",
     "bandiera": "https://flagcdn.com/w80/it.png"
   },
@@ -179,7 +179,7 @@
     "nome": "Alphadjo Cissè",
     "data_nascita": "2006-10-22",
     "numero_di_maglia": "70",
-    "immagine": "https://via.placeholder.com/150/000000/FFFFFF?text=No+Image",
+    "immagine": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8VkWWvJPxjVeTXhX_EDh8uLM16f7d8r-0P4eXjtiTsRLsAH-uM5lW6Mk&s=10",
     "ruolo": "Centrocampista",
     "bandiera": "https://flagcdn.com/w80/ci.png"
   },
@@ -203,7 +203,7 @@
     "nome": "Gonçalo Ramos",
     "data_nascita": "2001-06-20",
     "numero_di_maglia": "9",
-    "immagine": "https://via.placeholder.com/150/000000/FFFFFF?text=No+Image",
+    "immagine": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKkgh1TexJn_OX3ElagRF_e6wm05C-WkOopS6ZWCTQSQ&s",
     "ruolo": "Attaccante",
     "bandiera": "https://flagcdn.com/w80/pt.png"
   },
@@ -227,7 +227,7 @@
     "nome": "Samuel Chukwueze",
     "data_nascita": "1999-05-22",
     "numero_di_maglia": "21",
-    "immagine": "https://via.placeholder.com/150/000000/FFFFFF?text=No+Image",
+    "immagine": "https://assets-eu-01.kc-usercontent.com/006f7528-416b-01e4-8ef2-ab6ab3f4e177/a61ef381-5b53-4aa0-a42a-6774e605a50d/2023.07.30-Curiosita-Chukwueze-WebHP.png",
     "ruolo": "Attaccante",
     "bandiera": "https://flagcdn.com/w80/ng.png"
   },
@@ -235,7 +235,7 @@
     "nome": "Andrej Kostić",
     "data_nascita": "2007-01-16",
     "numero_di_maglia": "47",
-    "immagine": "https://via.placeholder.com/150/000000/FFFFFF?text=No+Image",
+    "immagine": "https://imgresizer.eurosport.com/unsafe/1200x0/filters:format(jpeg)/origin-imgresizer.eurosport.com/2021/04/20/3118094-63917608-2560-1440.jpg",
     "ruolo": "Attaccante",
     "bandiera": "https://flagcdn.com/w80/rs.png"
   },
@@ -243,7 +243,7 @@
     "nome": "Francesco Camarda",
     "data_nascita": "2008-03-10",
     "numero_di_maglia": "73",
-    "immagine": "https://via.placeholder.com/150/000000/FFFFFF?text=No+Image",
+    "immagine": "https://assets-eu-01.kc-usercontent.com/006f7528-416b-01e4-8ef2-ab6ab3f4e177/ac8af359-7be0-4914-ab8b-28e21b411954/2025.06.xx-CU-Camarda-WebHP.png",
     "ruolo": "Attaccante",
     "bandiera": "https://flagcdn.com/w80/it.png"
   }
