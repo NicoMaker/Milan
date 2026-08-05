@@ -27,14 +27,43 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   const MONTHS = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
 
+  // --- Determina l'anno di inizio stagione da meta tag, input nascosto o URL ---
+  const getSeasonStartYear = () => {
+    const meta = document.querySelector('meta[name="season-start-year"]');
+    if (meta) return parseInt(meta.content, 10);
+    const input = document.getElementById('season-start-year');
+    if (input) return parseInt(input.value, 10);
+    const path = window.location.pathname;
+    const match = path.match(/\/(\d{4})-\d{4}\//);
+    if (match) return parseInt(match[1], 10);
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+    return currentMonth >= 7 ? currentYear : currentYear - 1;
+  };
+
+  const seasonStartYear = getSeasonStartYear();
+  const seasonDisplay = `${seasonStartYear}/${seasonStartYear + 1}`; // es. "2026/2027"
+
+  // --- Calcolo età al 1º agosto dell'anno di inizio stagione ---
+  const calculateAge = (birthDate) => {
+    if (!birthDate || isNaN(birthDate.getTime())) return null;
+    const seasonStart = new Date(seasonStartYear, 7, 1); // 1º agosto
+    let age = seasonStart.getFullYear() - birthDate.getFullYear();
+    const m = seasonStart.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && seasonStart.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     if (Number.isNaN(date.getTime())) return dateStr;
     return `${date.getDate().toString().padStart(2, "0")} ${MONTHS[date.getMonth()]} ${date.getFullYear()}`;
   };
 
-  // Placeholder SVG locale: sostituisce foto/bandiere che non caricano,
-  // al posto di un servizio esterno che potrebbe non essere più disponibile.
+  // Placeholder SVG
   const placeholder = (label, bg = "#18181b", fg = "#c9a24b") => {
     const text = (label || "?").trim().slice(0, 2).toUpperCase();
     const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150'><rect width='100%' height='100%' fill='${bg}'/><text x='50%' y='55%' font-family='sans-serif' font-size='54' fill='${fg}' text-anchor='middle' dominant-baseline='middle'>${text}</text></svg>`;
@@ -61,7 +90,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     card.querySelectorAll("h3").forEach((el) => (el.textContent = player.nome));
     card.querySelectorAll(".maglia").forEach((el) => (el.textContent = player.numero_di_maglia));
-    card.querySelector(".birth-date").innerHTML = `Nato il <span class="formatted-date">${formatDate(player.data_nascita)}</span>`;
+
+    // Data di nascita + età + stagione
+    const birthSpan = card.querySelector(".birth-date");
+    const birthDateObj = new Date(player.data_nascita);
+    const age = calculateAge(birthDateObj);
+    let birthHTML = `Nato il <span class="formatted-date">${formatDate(player.data_nascita)}</span>`;
+    if (age !== null) {
+      birthHTML += ` <span class="age">(${age} anni – stagione ${seasonDisplay})</span>`;
+    }
+    birthSpan.innerHTML = birthHTML;
+
     card.querySelector(".role").textContent = player.ruolo || "Ruolo sconosciuto";
 
     if (player.bandiera) {
