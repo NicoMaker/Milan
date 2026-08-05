@@ -197,7 +197,9 @@ main {
   box-shadow: 0 0 0 4px rgba(201, 162, 75, 0.25);
 }
 
-.timeline-marker sub {
+.timeline-marker .marker-year-end {
+  display: inline;
+  vertical-align: baseline;
   color: var(--color-grey-dim);
   font-size: 0.75em;
 }

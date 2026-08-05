@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const marker = document.createElement("div");
     marker.className = "timeline-marker";
     const [y1, y2] = shortYear(season.year).split("/");
-    marker.innerHTML = `${y1}<sub>/${y2}</sub>`;
+    marker.innerHTML = `${y1}<span class="marker-year-end">/${y2}</span>`;
     entry.appendChild(marker);
 
     const card = document.createElement("div");
