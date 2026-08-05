@@ -38,12 +38,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const ordinal = (n) => `${n}°`;
 
-  const createCompChip = (comp, isSerieAWinner) => {
+  // Risolve l'icona di una competizione leggendo il json separato dei loghi:
+  // - "Serie A": il logo può cambiare di anno in anno -> cerca per year, con fallback
+  //   sull'anno più recente disponibile.
+  // - Tutte le altre competizioni: logo fisso, sempre lo stesso indipendentemente dall'anno.
+  const resolveIcon = (logos, comp, year) => {
+    if (!logos) return undefined;
+    if (comp.name === "Serie A") {
+      if (logos.serieA?.[year]) return logos.serieA[year];
+      const years = Object.keys(logos.serieA || {}).sort();
+      return years.length ? logos.serieA[years[years.length - 1]] : undefined;
+    }
+    return logos.competitions?.[comp.name];
+  };
+
+  const createCompChip = (comp, isSerieAWinner, year, logos) => {
     const li = document.createElement("li");
     const isWinner = comp.winner || (comp.name === "Serie A" && isSerieAWinner);
     li.className = `comp-chip${isWinner ? " won" : ""}`;
     const img = document.createElement("img");
-    img.src = comp.icon;
+    img.src = resolveIcon(logos, comp, year);
     img.alt = "";
     img.loading = "lazy";
     withFallback(img, comp.name);
@@ -53,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return li;
   };
 
-  const createEntry = (season, index) => {
+  const createEntry = (season, index, logos) => {
     const isChampion = season.position === 1;
     const isPending = typeof season.position !== "number";
 
@@ -98,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const list = document.createElement("ul");
       list.className = "competitions-row";
       season.competitions.forEach((comp) =>
-        list.appendChild(createCompChip(comp, isChampion)),
+        list.appendChild(createCompChip(comp, isChampion, season.year, logos)),
       );
       card.appendChild(list);
     }
@@ -113,10 +127,10 @@ document.addEventListener("DOMContentLoaded", () => {
     return entry;
   };
 
-  const renderTimeline = (seasons) => {
+  const renderTimeline = (seasons, logos) => {
     DOM.timeline.innerHTML = "";
     seasons.forEach((season, i) =>
-      DOM.timeline.appendChild(createEntry(season, i)),
+      DOM.timeline.appendChild(createEntry(season, i, logos)),
     );
   };
 
@@ -130,13 +144,15 @@ document.addEventListener("DOMContentLoaded", () => {
       .addEventListener("click", () => location.reload());
   };
 
-  fetch("data.json")
-    .then((res) =>
+  const fetchJSON = (url) =>
+    fetch(url).then((res) =>
       res.ok ? res.json() : Promise.reject(new Error("Risposta non valida")),
-    )
-    .then((data) => {
+    );
+
+  Promise.all([fetchJSON("data.json"), fetchJSON("assets/data/logos.json")])
+    .then(([data, logos]) => {
       DOM.loading.classList.add("hidden");
-      renderTimeline(data.seasons);
+      renderTimeline(data.seasons, logos);
     })
     .catch((err) => {
       console.error(err);
