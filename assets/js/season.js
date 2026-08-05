@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Aggiorna footer
-  document.getElementById("year").innerHTML = `<p>&copy; ${new Date().getFullYear()} A.C. Milan - Tutti i diritti riservati</p>`;
+  const yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // DOM Elements
   const DOM = {
     roles: document.getElementById("roles-container"),
     loading: document.getElementById("loading-indicator"),
@@ -10,52 +9,78 @@ document.addEventListener("DOMContentLoaded", () => {
     search: document.getElementById("search-input"),
     searchBtn: document.getElementById("search-button"),
     suggestions: document.getElementById("search-suggestions"),
-    filters: document.querySelectorAll(".filter-btn")
+    filters: document.querySelectorAll(".filter-btn"),
   };
 
-  // App State
   let players = [];
   let activeFilters = ["Portiere", "Difensore", "Centrocampista", "Attaccante"];
   let searchTerm = "";
   let suggestionsList = [];
   let selectedSuggestionIdx = -1;
 
-  // Costanti
   const ROLE_ORDER = ["Portiere", "Difensore", "Centrocampista", "Attaccante", "Sconosciuto"];
   const ROLE_PLURALS = {
     Portiere: "Portieri",
     Difensore: "Difensori",
     Centrocampista: "Centrocampisti",
-    Attaccante: "Attaccanti"
+    Attaccante: "Attaccanti",
   };
+  const MONTHS = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
-    return `${date.getDate().toString().padStart(2, '0')} ${["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"][date.getMonth()]} ${date.getFullYear()}`;
+    if (Number.isNaN(date.getTime())) return dateStr;
+    return `${date.getDate().toString().padStart(2, "0")} ${MONTHS[date.getMonth()]} ${date.getFullYear()}`;
+  };
+
+  // Placeholder SVG locale: sostituisce foto/bandiere che non caricano,
+  // al posto di un servizio esterno che potrebbe non essere più disponibile.
+  const placeholder = (label, bg = "#18181b", fg = "#c9a24b") => {
+    const text = (label || "?").trim().slice(0, 2).toUpperCase();
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150'><rect width='100%' height='100%' fill='${bg}'/><text x='50%' y='55%' font-family='sans-serif' font-size='54' fill='${fg}' text-anchor='middle' dominant-baseline='middle'>${text}</text></svg>`;
+    return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+  };
+
+  const withFallback = (img, label) => {
+    img.addEventListener("error", () => { img.src = placeholder(label); }, { once: true });
   };
 
   const createPlayerCard = (player, index) => {
-    const card = document.getElementById("player-card-template").content.cloneNode(true).querySelector(".card");
-    card.style.animationDelay = `${0.1 * index}s`;
-    
-    const img = card.querySelector(".card-img");
-    img.src = player.immagine || "https://via.placeholder.com/150?text=No+Image";
-    img.alt = player.nome;
+    const card = document
+      .getElementById("player-card-template")
+      .content.cloneNode(true)
+      .querySelector(".card");
+    card.style.setProperty("--i", index);
 
-    card.querySelectorAll("h3").forEach(el => el.textContent = player.nome);
-    card.querySelectorAll(".maglia").forEach(el => el.textContent = player.numero_di_maglia);
-    card.querySelector(".birth-date").innerHTML = `Nato il: <span class="formatted-date">${formatDate(player.data_nascita)}</span>`;
+    const img = card.querySelector(".card-img");
+    img.src = player.immagine;
+    img.alt = player.nome;
+    img.loading = "lazy";
+    img.decoding = "async";
+    withFallback(img, player.nome.split(" ").map((s) => s[0]).join(""));
+
+    card.querySelectorAll("h3").forEach((el) => (el.textContent = player.nome));
+    card.querySelectorAll(".maglia").forEach((el) => (el.textContent = player.numero_di_maglia));
+    card.querySelector(".birth-date").innerHTML = `Nato il <span class="formatted-date">${formatDate(player.data_nascita)}</span>`;
+    card.querySelector(".role").textContent = player.ruolo || "Ruolo sconosciuto";
 
     if (player.bandiera) {
       const nationalityEl = card.querySelector(".nationality");
-      nationalityEl.innerHTML = `<img src="${player.bandiera}" alt="Bandiera ${player.nazionalita}" class="flag">`;
+      const flagImg = document.createElement("img");
+      flagImg.src = player.bandiera;
+      flagImg.alt = player.nazionalita ? `Bandiera ${player.nazionalita}` : "Bandiera";
+      flagImg.className = "flag";
+      flagImg.loading = "lazy";
+      withFallback(flagImg, player.nazionalita);
+      nationalityEl.appendChild(flagImg);
     }
 
-    card.addEventListener("click", () => card.classList.toggle("flipped"));
+    const toggle = () => card.classList.toggle("flipped");
+    card.addEventListener("click", toggle);
     card.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        card.classList.toggle("flipped");
+        toggle();
       }
     });
 
@@ -67,26 +92,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (activeFilters.length === 0) {
       DOM.noResults.classList.remove("hidden");
-      DOM.noResults.querySelector("p").textContent = "Seleziona almeno un ruolo per visualizzare i giocatori.";
+      DOM.noResults.querySelector("p").textContent = "Seleziona almeno un ruolo per vedere la rosa.";
       return;
     }
 
-    const filtered = players.filter(p => 
-      activeFilters.includes(p.ruolo) && 
-      (searchTerm === "" || p.nome.toLowerCase().includes(searchTerm.toLowerCase()) || 
-       p.numero_di_maglia.toString().includes(searchTerm) ||
-       (p.nazionalita?.toLowerCase().includes(searchTerm.toLowerCase())))
+    const term = searchTerm.toLowerCase();
+    const filtered = players.filter(
+      (p) =>
+        activeFilters.includes(p.ruolo) &&
+        (term === "" ||
+          p.nome.toLowerCase().includes(term) ||
+          p.numero_di_maglia.toString().includes(term) ||
+          p.nazionalita?.toLowerCase().includes(term))
     );
 
     if (filtered.length === 0) {
       DOM.noResults.classList.remove("hidden");
-      DOM.noResults.querySelector("p").textContent = "Nessun giocatore trovato. Prova con un'altra ricerca.";
+      DOM.noResults.querySelector("p").textContent = "Nessun giocatore corrisponde alla ricerca. Prova con un nome, un numero di maglia o una nazionalità.";
       return;
     }
 
     DOM.noResults.classList.add("hidden");
 
-    // Raggruppa per ruolo
     const grouped = filtered.reduce((acc, p) => {
       const role = p.ruolo || "Sconosciuto";
       (acc[role] = acc[role] || []).push(p);
@@ -96,9 +123,9 @@ document.addEventListener("DOMContentLoaded", () => {
     Object.keys(grouped)
       .sort((a, b) => ROLE_ORDER.indexOf(a) - ROLE_ORDER.indexOf(b))
       .forEach((role, idx) => {
-        const section = document.createElement("div");
+        const section = document.createElement("section");
         section.className = "role-section";
-        section.style.animationDelay = `${idx * 0.2}s`;
+        section.style.animationDelay = `${idx * 0.15}s`;
         section.innerHTML = `<h2>${ROLE_PLURALS[role] || role}</h2><div class="role-cards"></div>`;
 
         const cardsContainer = section.querySelector(".role-cards");
@@ -113,15 +140,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const updateFiltersUI = () => {
     const allBtn = document.querySelector('[data-filter="all"]');
     const allRoles = ["Portiere", "Difensore", "Centrocampista", "Attaccante"];
-    const allSelected = allRoles.every(r => activeFilters.includes(r));
+    const allSelected = allRoles.every((r) => activeFilters.includes(r));
 
-    DOM.filters.forEach(btn => {
+    DOM.filters.forEach((btn) => {
       const filter = btn.dataset.filter;
-      if (filter === "all") {
-        btn.classList.toggle("active", allSelected);
-      } else {
-        btn.classList.toggle("active", activeFilters.includes(filter));
-      }
+      btn.classList.toggle("active", filter === "all" ? allSelected : activeFilters.includes(filter));
+      btn.setAttribute("aria-pressed", btn.classList.contains("active") ? "true" : "false");
     });
   };
 
@@ -131,17 +155,26 @@ document.addEventListener("DOMContentLoaded", () => {
     renderPlayers();
   };
 
+  const updateSuggestionSelection = () => {
+    suggestionsList.forEach((s, i) => {
+      s.classList.toggle("selected", i === selectedSuggestionIdx);
+      if (i === selectedSuggestionIdx) s.scrollIntoView({ block: "nearest" });
+    });
+  };
+
   const generateSuggestions = (query) => {
     if (query.length < 2) {
       DOM.suggestions.classList.add("hidden");
       return;
     }
 
-    const matches = players.filter(p => 
-      p.nome.toLowerCase().includes(query.toLowerCase()) ||
-      p.numero_di_maglia.toString().includes(query) ||
-      p.nazionalita?.toLowerCase().includes(query.toLowerCase()) ||
-      p.ruolo?.toLowerCase().includes(query.toLowerCase())
+    const q = query.toLowerCase();
+    const matches = players.filter(
+      (p) =>
+        p.nome.toLowerCase().includes(q) ||
+        p.numero_di_maglia.toString().includes(query) ||
+        p.nazionalita?.toLowerCase().includes(q) ||
+        p.ruolo?.toLowerCase().includes(q)
     );
 
     if (matches.length === 0) {
@@ -160,29 +193,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
     Object.keys(grouped)
       .sort((a, b) => ROLE_ORDER.indexOf(a) - ROLE_ORDER.indexOf(b))
-      .forEach(role => {
+      .forEach((role) => {
         const header = document.createElement("div");
         header.className = "suggestion-category";
-        header.textContent = ROLE_PLURALS[role] || `${role}s`;
+        header.textContent = ROLE_PLURALS[role] || role;
         DOM.suggestions.appendChild(header);
 
-        grouped[role].forEach(player => {
+        grouped[role].forEach((player) => {
           const item = document.createElement("div");
           item.className = "suggestion-item";
+          item.setAttribute("role", "option");
           item.setAttribute("data-player-name", player.nome);
-          
+
           item.innerHTML = `
             <span class="suggestion-jersey">${player.numero_di_maglia}</span>
             <span class="suggestion-name">${player.nome}</span>
-            ${player.bandiera ? `<span class="suggestion-nationality"><img src="${player.bandiera}" alt="Bandiera ${player.nazionalita}" class="suggestion-flag"></span>` : ""}
           `;
-          
+
+          if (player.bandiera) {
+            const flag = document.createElement("img");
+            flag.src = player.bandiera;
+            flag.alt = "";
+            flag.className = "suggestion-flag";
+            withFallback(flag, player.nazionalita);
+            item.appendChild(flag);
+          }
+
           item.addEventListener("click", () => {
             DOM.search.value = player.nome;
             DOM.suggestions.classList.add("hidden");
             performSearch();
           });
-          
+
           DOM.suggestions.appendChild(item);
           suggestionsList.push(item);
         });
@@ -192,13 +234,16 @@ document.addEventListener("DOMContentLoaded", () => {
     selectedSuggestionIdx = -1;
   };
 
-  // Event Listeners
   DOM.search.addEventListener("input", (e) => generateSuggestions(e.target.value.trim()));
-  DOM.search.addEventListener("focus", () => DOM.search.value.trim().length >= 2 && generateSuggestions(DOM.search.value.trim()));
+  DOM.search.addEventListener("focus", () => {
+    const value = DOM.search.value.trim();
+    if (value.length >= 2) generateSuggestions(value);
+  });
   DOM.searchBtn.addEventListener("click", performSearch);
+
   DOM.search.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && selectedSuggestionIdx === -1) performSearch();
-    
+
     if (!DOM.suggestions.classList.contains("hidden") && suggestionsList.length) {
       if (e.key === "ArrowDown") {
         e.preventDefault();
@@ -219,21 +264,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  const updateSuggestionSelection = () => {
-    suggestionsList.forEach((s, i) => {
-      s.classList.toggle("selected", i === selectedSuggestionIdx);
-      if (i === selectedSuggestionIdx) s.scrollIntoView({ block: "nearest" });
-    });
-  };
-
   document.addEventListener("click", (e) => {
     if (!DOM.suggestions.contains(e.target) && e.target !== DOM.search) {
       DOM.suggestions.classList.add("hidden");
     }
   });
 
-  // Filter Logic
-  DOM.filters.forEach(btn => {
+  DOM.filters.forEach((btn) => {
     btn.addEventListener("click", () => {
       const filter = btn.dataset.filter;
       const allBtn = document.querySelector('[data-filter="all"]');
@@ -242,43 +279,36 @@ document.addEventListener("DOMContentLoaded", () => {
       if (filter === "all") {
         if (activeFilters.length === 4) {
           activeFilters = [];
-          allBtn.classList.remove("active");
         } else {
           activeFilters = [...allRoles];
-          allBtn.classList.add("active");
-          DOM.filters.forEach(f => f !== allBtn && f.classList.remove("active"));
         }
+      } else if (activeFilters.includes(filter)) {
+        activeFilters = activeFilters.filter((f) => f !== filter);
       } else {
-        if (activeFilters.includes(filter)) {
-          activeFilters = activeFilters.filter(f => f !== filter);
-          allBtn.classList.remove("active");
-        } else {
-          activeFilters.push(filter);
-          if (activeFilters.length === 4) {
-            activeFilters = [...allRoles];
-            allBtn.classList.add("active");
-            DOM.filters.forEach(f => f !== allBtn && f.classList.remove("active"));
-          }
-        }
-        updateFiltersUI();
+        activeFilters.push(filter);
+        if (activeFilters.length === 4) activeFilters = [...allRoles];
       }
+
+      updateFiltersUI();
       renderPlayers();
     });
   });
 
-  // Load Data
   DOM.loading.classList.remove("hidden");
   fetch("player.json")
-    .then(res => res.ok ? res.json() : Promise.reject("Errore caricamento"))
-    .then(data => {
+    .then((res) => (res.ok ? res.json() : Promise.reject(new Error("Risposta non valida"))))
+    .then((data) => {
       players = data;
       DOM.loading.classList.add("hidden");
       updateFiltersUI();
       renderPlayers();
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err);
-      DOM.loading.innerHTML = `<p>Errore nel caricamento: ${err.message}</p><button id="retry-button" class="filter-btn">Riprova</button>`;
+      DOM.loading.innerHTML = `
+        <p>Non riusciamo a caricare la rosa. Verifica la connessione e riprova.</p>
+        <button id="retry-button" class="filter-btn">Riprova</button>
+      `;
       document.getElementById("retry-button")?.addEventListener("click", () => location.reload());
     });
 });

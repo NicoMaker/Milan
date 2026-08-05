@@ -24,7 +24,7 @@
           "winner": false
         }
       ],
-      "link": "Season/2026-2027/Index.html"
+      "link": "season/2026-2027/index.html"
     },
     {
       "year": "2025-2026",
@@ -45,7 +45,7 @@
           "winner": false
         }
       ],
-      "link": "Season/2025-2026/Index.html"
+      "link": "season/2025-2026/index.html"
     },
     {
       "year": "2024-2025",
@@ -71,7 +71,7 @@
           "winner": true
         }
       ],
-      "link": "Season/2024-2025/Index.html"
+      "link": "season/2024-2025/index.html"
     }
   ]
 }

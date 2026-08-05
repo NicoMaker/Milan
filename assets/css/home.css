@@ -1,0 +1,423 @@
+/* ==========================================================================
+   HOME — Archivio Rose A.C. Milan
+   Struttura a "diario di bordo": una linea del tempo verticale, perché
+   il contenuto è per natura una sequenza di stagioni.
+   ========================================================================== */
+
+body {
+  background-color: var(--color-black);
+  background-image: radial-gradient(
+      ellipse 900px 500px at 50% -10%,
+      rgba(200, 16, 46, 0.25),
+      transparent 65%
+    );
+}
+
+/* --- Header --- */
+.site-header {
+  padding: var(--space-lg) var(--space-sm) var(--space-md);
+  text-align: center;
+  position: relative;
+}
+
+.site-header .crest {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto var(--space-sm);
+  object-fit: contain;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: var(--space-xs);
+}
+
+.site-header h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-ivory);
+}
+
+.site-header p {
+  max-width: 42ch;
+  margin: var(--space-xs) auto 0;
+  color: var(--color-grey);
+  font-size: 1.02rem;
+}
+
+/* --- Main --- */
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-sm) var(--space-xl);
+}
+
+/* --- Loading & error --- */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl) 0;
+  color: var(--color-grey);
+}
+
+.spinner {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 3px solid var(--color-line);
+  border-top-color: var(--color-red);
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.retry-button {
+  margin-top: var(--space-xs);
+  padding: 0.7rem 1.6rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-red);
+  color: var(--color-ivory);
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.retry-button:hover {
+  background: var(--color-red-deep);
+}
+
+/* --- Timeline --- */
+.timeline {
+  position: relative;
+  padding-left: 4.5rem;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 1.85rem;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  width: 3px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--color-red) 0,
+    var(--color-red) 10px,
+    var(--color-black-soft) 10px,
+    var(--color-black-soft) 18px
+  );
+}
+
+.timeline-entry {
+  position: relative;
+  margin-bottom: var(--space-lg);
+  opacity: 0;
+  animation: rise var(--dur-slow) var(--ease-out) forwards;
+  animation-delay: calc(var(--i, 0) * 0.12s);
+}
+
+.timeline-entry:last-child {
+  margin-bottom: 0;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -4.5rem;
+  top: 0.3rem;
+  width: 3.7rem;
+  text-align: right;
+  font-family: var(--font-numeral);
+  color: var(--color-grey);
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.timeline-marker::after {
+  content: "";
+  position: absolute;
+  right: -0.72rem;
+  top: 0.35rem;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-black);
+  border: 3px solid var(--color-red);
+}
+
+.is-champion .timeline-marker::after {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 4px rgba(201, 162, 75, 0.25);
+}
+
+.timeline-marker sub {
+  color: var(--color-grey-dim);
+  font-size: 0.75em;
+}
+
+.timeline-card {
+  background: linear-gradient(155deg, var(--color-black-soft), var(--color-black));
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-card);
+  transition: transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out);
+}
+
+.timeline-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lift);
+}
+
+.is-champion .timeline-card {
+  border-color: rgba(201, 162, 75, 0.5);
+}
+
+.card-top {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: var(--space-2xs);
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.position-meta {
+  min-width: 0;
+}
+
+.position-numeral {
+  font-family: var(--font-numeral);
+  font-size: 2.6rem;
+  line-height: 1;
+  color: var(--color-ivory);
+}
+
+.is-champion .position-numeral {
+  color: var(--color-gold);
+}
+
+.position-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.season-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.position-label {
+  font-size: 0.9rem;
+  color: var(--color-grey);
+}
+
+.champion-tag {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  border: 1px solid rgba(201, 162, 75, 0.5);
+  border-radius: var(--radius-pill);
+  padding: 0.3rem 0.7rem;
+  white-space: nowrap;
+}
+
+.champion-tag svg {
+  width: 14px;
+  height: 14px;
+}
+
+.pending-tag {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-grey);
+  white-space: nowrap;
+}
+
+.pending-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-red);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.75);
+  }
+}
+
+.competitions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: var(--space-md);
+}
+
+.comp-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(242, 238, 227, 0.06);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-pill);
+  padding: 0.35rem 0.75rem 0.35rem 0.35rem;
+  font-size: 0.78rem;
+  color: var(--color-grey);
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.comp-chip img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.comp-chip.won {
+  background: rgba(201, 162, 75, 0.14);
+  border-color: rgba(201, 162, 75, 0.45);
+  color: var(--color-ivory);
+}
+
+.comp-chip:hover {
+  background: rgba(242, 238, 227, 0.12);
+}
+
+.view-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-ivory);
+  border-bottom: 1px solid var(--color-red);
+  padding-bottom: 0.2rem;
+  transition: gap var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+
+.view-link:hover {
+  gap: 0.65rem;
+  color: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
+.view-link svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* --- Footer --- */
+.site-footer {
+  border-top: 1px solid var(--color-line);
+  padding: var(--space-md);
+  text-align: center;
+}
+
+.site-footer p {
+  color: var(--color-grey);
+  font-size: 0.85rem;
+  margin-bottom: var(--space-xs);
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+}
+
+.social-links a {
+  color: var(--color-grey);
+  transition: color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+
+.social-links a:hover {
+  color: var(--color-red);
+  transform: translateY(-2px);
+}
+
+/* --- Responsive --- */
+@media (max-width: 560px) {
+  .timeline {
+    padding-left: 3.4rem;
+  }
+
+  .timeline::before {
+    left: 1.3rem;
+  }
+
+  .timeline-marker {
+    left: -3.4rem;
+    width: 2.9rem;
+    font-size: 0.82rem;
+  }
+
+  .timeline-marker::after {
+    right: -0.55rem;
+  }
+
+  .position-numeral {
+    font-size: 2.1rem;
+  }
+
+  .champion-tag,
+  .pending-tag {
+    margin-left: 0;
+  }
+}
