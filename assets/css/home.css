@@ -13,45 +13,61 @@ body {
     );
 }
 
-/* --- Header --- */
+/* --- Header: fisso durante lo scroll, compatto per non invadere lo schermo --- */
 .site-header {
-  padding: var(--space-lg) var(--space-sm) var(--space-md);
-  text-align: center;
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  background: rgba(12, 12, 14, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-line);
+  padding: var(--space-xs) var(--space-sm);
+  text-align: left;
 }
 
 .site-header .crest {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto var(--space-sm);
+  width: 44px;
+  height: 44px;
   object-fit: contain;
+  flex-shrink: 0;
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
 }
 
 .eyebrow {
   display: inline-block;
   font-family: var(--font-display);
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 500;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--color-gold);
-  margin-bottom: var(--space-xs);
 }
 
 .site-header h1 {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-size: clamp(1.15rem, 3.4vw, 1.6rem);
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   color: var(--color-ivory);
+  line-height: 1.1;
 }
 
-.site-header p {
-  max-width: 42ch;
-  margin: var(--space-xs) auto 0;
+.page-intro {
+  max-width: 46ch;
+  margin: 0 auto var(--space-lg);
   color: var(--color-grey);
   font-size: 1.02rem;
+  text-align: center;
 }
 
 /* --- Main --- */
