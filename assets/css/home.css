@@ -7,10 +7,10 @@
 body {
   background-color: var(--color-black);
   background-image: radial-gradient(
-      ellipse 900px 500px at 50% -10%,
-      rgba(200, 16, 46, 0.25),
-      transparent 65%
-    );
+    ellipse 900px 500px at 50% -10%,
+    rgba(200, 16, 46, 0.25),
+    transparent 65%
+  );
 }
 
 /* --- Header: fisso durante lo scroll, compatto per non invadere lo schermo --- */
@@ -205,12 +205,18 @@ main {
 }
 
 .timeline-card {
-  background: linear-gradient(155deg, var(--color-black-soft), var(--color-black));
+  background: linear-gradient(
+    155deg,
+    var(--color-black-soft),
+    var(--color-black)
+  );
   border: 1px solid var(--color-line);
   border-radius: var(--radius-lg);
   padding: var(--space-md);
   box-shadow: var(--shadow-card);
-  transition: transform var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out);
+  transition:
+    transform var(--dur-med) var(--ease-out),
+    box-shadow var(--dur-med) var(--ease-out);
 }
 
 .timeline-card:hover {
@@ -367,7 +373,10 @@ main {
   color: var(--color-ivory);
   border-bottom: 1px solid var(--color-red);
   padding-bottom: 0.2rem;
-  transition: gap var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  transition:
+    gap var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
 }
 
 .view-link:hover {
@@ -402,7 +411,9 @@ main {
 
 .social-links a {
   color: var(--color-grey);
-  transition: color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
 }
 
 .social-links a:hover {

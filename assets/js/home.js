@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("current-year").textContent = new Date().getFullYear();
+  document.getElementById("current-year").textContent =
+    new Date().getFullYear();
 
   const DOM = {
     timeline: document.getElementById("timeline"),
@@ -19,7 +20,13 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const withFallback = (img, label) => {
-    img.addEventListener("error", () => { img.src = placeholder(label); }, { once: true });
+    img.addEventListener(
+      "error",
+      () => {
+        img.src = placeholder(label);
+      },
+      { once: true },
+    );
     return img;
   };
 
@@ -90,7 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (season.competitions?.length) {
       const list = document.createElement("ul");
       list.className = "competitions-row";
-      season.competitions.forEach((comp) => list.appendChild(createCompChip(comp, isChampion)));
+      season.competitions.forEach((comp) =>
+        list.appendChild(createCompChip(comp, isChampion)),
+      );
       card.appendChild(list);
     }
 
@@ -106,7 +115,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const renderTimeline = (seasons) => {
     DOM.timeline.innerHTML = "";
-    seasons.forEach((season, i) => DOM.timeline.appendChild(createEntry(season, i)));
+    seasons.forEach((season, i) =>
+      DOM.timeline.appendChild(createEntry(season, i)),
+    );
   };
 
   const showError = () => {
@@ -114,11 +125,15 @@ document.addEventListener("DOMContentLoaded", () => {
       <p>Non riusciamo a caricare l'archivio delle stagioni.</p>
       <button class="retry-button" id="retry-button">Riprova</button>
     `;
-    document.getElementById("retry-button").addEventListener("click", () => location.reload());
+    document
+      .getElementById("retry-button")
+      .addEventListener("click", () => location.reload());
   };
 
   fetch("data.json")
-    .then((res) => (res.ok ? res.json() : Promise.reject(new Error("Risposta non valida"))))
+    .then((res) =>
+      res.ok ? res.json() : Promise.reject(new Error("Risposta non valida")),
+    )
     .then((data) => {
       DOM.loading.classList.add("hidden");
       renderTimeline(data.seasons);

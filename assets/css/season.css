@@ -347,7 +347,9 @@ main {
   backface-visibility: hidden;
   border-radius: var(--radius-md);
   overflow: hidden;
-  transition: transform 0.6s var(--ease-out), box-shadow var(--dur-med) var(--ease-out);
+  transition:
+    transform 0.6s var(--ease-out),
+    box-shadow var(--dur-med) var(--ease-out);
   box-shadow: var(--shadow-card);
 }
 
@@ -383,19 +385,23 @@ main {
   padding: var(--space-sm);
   text-align: center;
   background-image: repeating-linear-gradient(
-      100deg,
-      var(--color-red) 0,
-      var(--color-red) 12px,
-      var(--color-black-soft) 12px,
-      var(--color-black-soft) 26px
-    );
+    100deg,
+    var(--color-red) 0,
+    var(--color-red) 12px,
+    var(--color-black-soft) 12px,
+    var(--color-black-soft) 26px
+  );
 }
 
 .card-front::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(12, 12, 14, 0.1) 0%, rgba(12, 12, 14, 0.75) 78%);
+  background: linear-gradient(
+    180deg,
+    rgba(12, 12, 14, 0.1) 0%,
+    rgba(12, 12, 14, 0.75) 78%
+  );
 }
 
 .card-front .card-img {
@@ -521,7 +527,9 @@ main {
 
 .social-links a {
   color: var(--color-grey);
-  transition: color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
 }
 
 .social-links a:hover {

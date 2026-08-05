@@ -18,20 +18,39 @@ document.addEventListener("DOMContentLoaded", () => {
   let suggestionsList = [];
   let selectedSuggestionIdx = -1;
 
-  const ROLE_ORDER = ["Portiere", "Difensore", "Centrocampista", "Attaccante", "Sconosciuto"];
+  const ROLE_ORDER = [
+    "Portiere",
+    "Difensore",
+    "Centrocampista",
+    "Attaccante",
+    "Sconosciuto",
+  ];
   const ROLE_PLURALS = {
     Portiere: "Portieri",
     Difensore: "Difensori",
     Centrocampista: "Centrocampisti",
     Attaccante: "Attaccanti",
   };
-  const MONTHS = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+  const MONTHS = [
+    "Gennaio",
+    "Febbraio",
+    "Marzo",
+    "Aprile",
+    "Maggio",
+    "Giugno",
+    "Luglio",
+    "Agosto",
+    "Settembre",
+    "Ottobre",
+    "Novembre",
+    "Dicembre",
+  ];
 
   // --- Determina l'anno di inizio stagione da meta tag, input nascosto o URL ---
   const getSeasonStartYear = () => {
     const meta = document.querySelector('meta[name="season-start-year"]');
     if (meta) return parseInt(meta.content, 10);
-    const input = document.getElementById('season-start-year');
+    const input = document.getElementById("season-start-year");
     if (input) return parseInt(input.value, 10);
     const path = window.location.pathname;
     const match = path.match(/\/(\d{4})-\d{4}\//);
@@ -71,7 +90,13 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const withFallback = (img, label) => {
-    img.addEventListener("error", () => { img.src = placeholder(label); }, { once: true });
+    img.addEventListener(
+      "error",
+      () => {
+        img.src = placeholder(label);
+      },
+      { once: true },
+    );
   };
 
   const createPlayerCard = (player, index) => {
@@ -86,10 +111,18 @@ document.addEventListener("DOMContentLoaded", () => {
     img.alt = player.nome;
     img.loading = "lazy";
     img.decoding = "async";
-    withFallback(img, player.nome.split(" ").map((s) => s[0]).join(""));
+    withFallback(
+      img,
+      player.nome
+        .split(" ")
+        .map((s) => s[0])
+        .join(""),
+    );
 
     card.querySelectorAll("h3").forEach((el) => (el.textContent = player.nome));
-    card.querySelectorAll(".maglia").forEach((el) => (el.textContent = player.numero_di_maglia));
+    card
+      .querySelectorAll(".maglia")
+      .forEach((el) => (el.textContent = player.numero_di_maglia));
 
     // Data di nascita + età + stagione
     const birthSpan = card.querySelector(".birth-date");
@@ -101,13 +134,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     birthSpan.innerHTML = birthHTML;
 
-    card.querySelector(".role").textContent = player.ruolo || "Ruolo sconosciuto";
+    card.querySelector(".role").textContent =
+      player.ruolo || "Ruolo sconosciuto";
 
     if (player.bandiera) {
       const nationalityEl = card.querySelector(".nationality");
       const flagImg = document.createElement("img");
       flagImg.src = player.bandiera;
-      flagImg.alt = player.nazionalita ? `Bandiera ${player.nazionalita}` : "Bandiera";
+      flagImg.alt = player.nazionalita
+        ? `Bandiera ${player.nazionalita}`
+        : "Bandiera";
       flagImg.className = "flag";
       flagImg.loading = "lazy";
       withFallback(flagImg, player.nazionalita);
@@ -131,7 +167,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (activeFilters.length === 0) {
       DOM.noResults.classList.remove("hidden");
-      DOM.noResults.querySelector("p").textContent = "Seleziona almeno un ruolo per vedere la rosa.";
+      DOM.noResults.querySelector("p").textContent =
+        "Seleziona almeno un ruolo per vedere la rosa.";
       return;
     }
 
@@ -142,12 +179,13 @@ document.addEventListener("DOMContentLoaded", () => {
         (term === "" ||
           p.nome.toLowerCase().includes(term) ||
           p.numero_di_maglia.toString().includes(term) ||
-          p.nazionalita?.toLowerCase().includes(term))
+          p.nazionalita?.toLowerCase().includes(term)),
     );
 
     if (filtered.length === 0) {
       DOM.noResults.classList.remove("hidden");
-      DOM.noResults.querySelector("p").textContent = "Nessun giocatore corrisponde alla ricerca. Prova con un nome, un numero di maglia o una nazionalità.";
+      DOM.noResults.querySelector("p").textContent =
+        "Nessun giocatore corrisponde alla ricerca. Prova con un nome, un numero di maglia o una nazionalità.";
       return;
     }
 
@@ -170,7 +208,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const cardsContainer = section.querySelector(".role-cards");
         grouped[role]
           .sort((a, b) => a.numero_di_maglia - b.numero_di_maglia)
-          .forEach((player, i) => cardsContainer.appendChild(createPlayerCard(player, i)));
+          .forEach((player, i) =>
+            cardsContainer.appendChild(createPlayerCard(player, i)),
+          );
 
         DOM.roles.appendChild(section);
       });
@@ -183,8 +223,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     DOM.filters.forEach((btn) => {
       const filter = btn.dataset.filter;
-      btn.classList.toggle("active", filter === "all" ? allSelected : activeFilters.includes(filter));
-      btn.setAttribute("aria-pressed", btn.classList.contains("active") ? "true" : "false");
+      btn.classList.toggle(
+        "active",
+        filter === "all" ? allSelected : activeFilters.includes(filter),
+      );
+      btn.setAttribute(
+        "aria-pressed",
+        btn.classList.contains("active") ? "true" : "false",
+      );
     });
   };
 
@@ -213,7 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
         p.nome.toLowerCase().includes(q) ||
         p.numero_di_maglia.toString().includes(query) ||
         p.nazionalita?.toLowerCase().includes(q) ||
-        p.ruolo?.toLowerCase().includes(q)
+        p.ruolo?.toLowerCase().includes(q),
     );
 
     if (matches.length === 0) {
@@ -273,7 +319,9 @@ document.addEventListener("DOMContentLoaded", () => {
     selectedSuggestionIdx = -1;
   };
 
-  DOM.search.addEventListener("input", (e) => generateSuggestions(e.target.value.trim()));
+  DOM.search.addEventListener("input", (e) =>
+    generateSuggestions(e.target.value.trim()),
+  );
   DOM.search.addEventListener("focus", () => {
     const value = DOM.search.value.trim();
     if (value.length >= 2) generateSuggestions(value);
@@ -283,10 +331,16 @@ document.addEventListener("DOMContentLoaded", () => {
   DOM.search.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && selectedSuggestionIdx === -1) performSearch();
 
-    if (!DOM.suggestions.classList.contains("hidden") && suggestionsList.length) {
+    if (
+      !DOM.suggestions.classList.contains("hidden") &&
+      suggestionsList.length
+    ) {
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        selectedSuggestionIdx = Math.min(selectedSuggestionIdx + 1, suggestionsList.length - 1);
+        selectedSuggestionIdx = Math.min(
+          selectedSuggestionIdx + 1,
+          suggestionsList.length - 1,
+        );
         updateSuggestionSelection();
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
@@ -294,7 +348,10 @@ document.addEventListener("DOMContentLoaded", () => {
         updateSuggestionSelection();
       } else if (e.key === "Enter" && selectedSuggestionIdx >= 0) {
         e.preventDefault();
-        DOM.search.value = suggestionsList[selectedSuggestionIdx].getAttribute("data-player-name");
+        DOM.search.value =
+          suggestionsList[selectedSuggestionIdx].getAttribute(
+            "data-player-name",
+          );
         DOM.suggestions.classList.add("hidden");
         performSearch();
       } else if (e.key === "Escape") {
@@ -313,7 +370,12 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", () => {
       const filter = btn.dataset.filter;
       const allBtn = document.querySelector('[data-filter="all"]');
-      const allRoles = ["Portiere", "Difensore", "Centrocampista", "Attaccante"];
+      const allRoles = [
+        "Portiere",
+        "Difensore",
+        "Centrocampista",
+        "Attaccante",
+      ];
 
       if (filter === "all") {
         if (activeFilters.length === 4) {
@@ -335,7 +397,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   DOM.loading.classList.remove("hidden");
   fetch("player.json")
-    .then((res) => (res.ok ? res.json() : Promise.reject(new Error("Risposta non valida"))))
+    .then((res) =>
+      res.ok ? res.json() : Promise.reject(new Error("Risposta non valida")),
+    )
     .then((data) => {
       players = data;
       DOM.loading.classList.add("hidden");
@@ -348,6 +412,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <p>Non riusciamo a caricare la rosa. Verifica la connessione e riprova.</p>
         <button id="retry-button" class="filter-btn">Riprova</button>
       `;
-      document.getElementById("retry-button")?.addEventListener("click", () => location.reload());
+      document
+        .getElementById("retry-button")
+        ?.addEventListener("click", () => location.reload());
     });
 });

@@ -6,20 +6,21 @@
 
 :root {
   /* --- Colore --- */
-  --color-red: #c8102e;        /* rosso rossonero */
-  --color-red-deep: #7a0c1f;   /* rosso in ombra, per profondità */
-  --color-black: #0c0c0e;      /* nero maglia, non un nero puro */
+  --color-red: #c8102e; /* rosso rossonero */
+  --color-red-deep: #7a0c1f; /* rosso in ombra, per profondità */
+  --color-black: #0c0c0e; /* nero maglia, non un nero puro */
   --color-black-soft: #18181b; /* superfici sopraelevate */
-  --color-ivory: #f2eee3;      /* carta d'annata, per il "cartellino" */
-  --color-gold: #c9a24b;       /* oro anticato, riservato ai trofei */
-  --color-grey: #9a9a9f;       /* testo secondario su fondo scuro */
-  --color-grey-dim: #56565b;   /* testo secondario su fondo chiaro */
+  --color-ivory: #f2eee3; /* carta d'annata, per il "cartellino" */
+  --color-gold: #c9a24b; /* oro anticato, riservato ai trofei */
+  --color-grey: #9a9a9f; /* testo secondario su fondo scuro */
+  --color-grey-dim: #56565b; /* testo secondario su fondo chiaro */
   --color-line: rgba(242, 238, 227, 0.14);
 
   /* --- Tipografia --- */
   --font-display: "Oswald", "Arial Narrow", sans-serif; /* titoli, insegne */
-  --font-numeral: "Anton", "Arial Narrow", sans-serif;  /* numeri di maglia/posizione */
-  --font-body: "Inter", system-ui, sans-serif;          /* testo corrente */
+  --font-numeral:
+    "Anton", "Arial Narrow", sans-serif; /* numeri di maglia/posizione */
+  --font-body: "Inter", system-ui, sans-serif; /* testo corrente */
 
   /* --- Spaziatura --- */
   --space-3xs: 0.25rem;
