@@ -22,9 +22,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: var(--space-xs);
-  background: rgba(10, 10, 12, 0.82);
-  backdrop-filter: var(--blur-md);
-  -webkit-backdrop-filter: var(--blur-md);
+  background: rgba(12, 12, 14, 0.92);
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--color-line);
   padding: var(--space-xs) var(--space-sm);
   text-align: left;
@@ -208,7 +207,7 @@ main {
 .timeline-card {
   background: linear-gradient(
     155deg,
-    var(--color-black-elevated),
+    var(--color-black-soft),
     var(--color-black)
   );
   border: 1px solid var(--color-line);
@@ -217,22 +216,16 @@ main {
   box-shadow: var(--shadow-card);
   transition:
     transform var(--dur-med) var(--ease-out),
-    box-shadow var(--dur-med) var(--ease-out),
-    border-color var(--dur-med) var(--ease-out);
+    box-shadow var(--dur-med) var(--ease-out);
 }
 
 .timeline-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lift);
-  border-color: var(--color-line-strong);
 }
 
 .is-champion .timeline-card {
-  border-color: rgba(212, 175, 95, 0.5);
-}
-
-.is-champion .timeline-card:hover {
-  box-shadow: var(--shadow-glow-gold);
+  border-color: rgba(201, 162, 75, 0.5);
 }
 
 .card-top {

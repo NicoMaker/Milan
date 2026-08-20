@@ -6,27 +6,15 @@
 
 :root {
   /* --- Colore --- */
-  --color-red: #d4162f; /* rosso rossonero */
-  --color-red-bright: #ff3b52; /* rosso acceso, per accenti/hover */
+  --color-red: #c8102e; /* rosso rossonero */
   --color-red-deep: #7a0c1f; /* rosso in ombra, per profondità */
-  --color-black: #0a0a0c; /* nero maglia, non un nero puro */
-  --color-black-soft: #17171b; /* superfici sopraelevate */
-  --color-black-elevated: #1f1f24; /* superfici ancora più sopraelevate */
-  --color-ivory: #f5f1e6; /* carta d'annata, per il "cartellino" */
-  --color-ivory-dim: #e4ddc9; /* ivory in ombra */
-  --color-gold: #d4af5f; /* oro anticato, riservato ai trofei */
-  --color-gold-bright: #f0cd82;
-  --color-grey: #9a9aa3; /* testo secondario su fondo scuro */
-  --color-grey-dim: #5c5c66; /* testo secondario su fondo chiaro */
-  --color-line: rgba(245, 241, 230, 0.12);
-  --color-line-strong: rgba(245, 241, 230, 0.22);
-
-  /* --- Superfici vetro --- */
-  --glass-bg: rgba(245, 241, 230, 0.06);
-  --glass-bg-strong: rgba(245, 241, 230, 0.1);
-  --glass-border: rgba(245, 241, 230, 0.14);
-  --blur-md: blur(14px);
-  --blur-lg: blur(22px);
+  --color-black: #0c0c0e; /* nero maglia, non un nero puro */
+  --color-black-soft: #18181b; /* superfici sopraelevate */
+  --color-ivory: #f2eee3; /* carta d'annata, per il "cartellino" */
+  --color-gold: #c9a24b; /* oro anticato, riservato ai trofei */
+  --color-grey: #9a9a9f; /* testo secondario su fondo scuro */
+  --color-grey-dim: #56565b; /* testo secondario su fondo chiaro */
+  --color-line: rgba(242, 238, 227, 0.14);
 
   /* --- Tipografia --- */
   --font-display: "Oswald", "Arial Narrow", sans-serif; /* titoli, insegne */
@@ -47,19 +35,15 @@
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 26px;
-  --radius-xl: 32px;
   --radius-pill: 999px;
 
   /* --- Profondità --- */
-  --shadow-card: 0 14px 34px rgba(0, 0, 0, 0.4);
-  --shadow-lift: 0 26px 54px rgba(0, 0, 0, 0.55);
+  --shadow-card: 0 14px 34px rgba(0, 0, 0, 0.38);
+  --shadow-lift: 0 22px 48px rgba(0, 0, 0, 0.5);
   --shadow-soft: 0 4px 14px rgba(0, 0, 0, 0.25);
-  --shadow-glow-red: 0 0 0 1px rgba(212, 22, 47, 0.35), 0 18px 40px -12px rgba(212, 22, 47, 0.45);
-  --shadow-glow-gold: 0 0 0 1px rgba(212, 175, 95, 0.45), 0 18px 40px -14px rgba(212, 175, 95, 0.4);
 
   /* --- Movimento --- */
   --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --dur-fast: 0.18s;
   --dur-med: 0.4s;
   --dur-slow: 0.7s;
@@ -131,30 +115,6 @@ input {
 
 .hidden {
   display: none !important;
-}
-
-/* --- Scrollbar sottile, coerente col resto del sito --- */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-red) transparent;
-}
-
-*::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
-}
-
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: var(--color-red);
-  border-radius: var(--radius-pill);
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-red-bright);
 }
 
 /* --- Pinstripe: la texture "da maglia" riutilizzata in più punti --- */
