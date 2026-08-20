@@ -563,3 +563,175 @@ main {
     display: none;
   }
 }
+
+/* Stili per le bandiere e le nazionalità */
+.nationality {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 6px;
+}
+
+.nationality-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.nationality-label {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #c9a24b;
+  min-width: 110px;
+  flex-shrink: 0;
+}
+
+.nationality-label.birth-label {
+  color: #8ab4f8;
+}
+
+.nationality-value {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: #e0e0e0;
+}
+
+.flag-small {
+  width: 20px;
+  height: 14px;
+  object-fit: cover;
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.birth-place {
+  color: #8ab4f8;
+  font-weight: 500;
+}
+
+/* Suggerimenti migliorati */
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: 4px;
+}
+
+.suggestion-item:hover {
+  background-color: rgba(201, 162, 75, 0.1);
+}
+
+.suggestion-item.selected {
+  background-color: rgba(201, 162, 75, 0.2);
+}
+
+.suggestion-nationality {
+  font-size: 0.75rem;
+  color: #a0a0a0;
+  flex: 1;
+  text-align: right;
+}
+
+.suggestion-flags {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Stili per le bandiere e le nazionalità */
+.nationality {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 6px;
+}
+
+.nationality-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.nationality-label {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #FDB813;
+  min-width: 110px;
+  flex-shrink: 0;
+}
+
+.nationality-label.birth-label {
+  color: #64B5F6;
+}
+
+.nationality-value {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.flag-small {
+  width: 28px;
+  height: 19px;
+  object-fit: cover;
+  border-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: transform 0.2s;
+}
+
+.flag-small:hover {
+  transform: scale(1.1);
+}
+
+.birth-place {
+  color: #8ab4f8;
+  font-weight: 500;
+}
+
+/* Suggerimenti migliorati */
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: 4px;
+}
+
+.suggestion-item:hover {
+  background-color: rgba(201, 162, 75, 0.1);
+}
+
+.suggestion-item.selected {
+  background-color: rgba(201, 162, 75, 0.2);
+}
+
+.suggestion-nationality {
+  font-size: 0.75rem;
+  color: #a0a0a0;
+  flex: 1;
+  text-align: right;
+}
+
+.suggestion-flags {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}

@@ -2,185 +2,277 @@
   {
     "nome": "Mike Maignan",
     "data_nascita": "1995-07-03",
+    "luogo_nascita": "Cayenne, Guyana Francese",
     "numero_di_maglia": "16",
     "immagine": "https://media.gqitalia.it/photos/6124e9996bd148bbda6df62b/1:1/w_2746,h_2746,c_limit/Maignan%20ok.jpg",
     "ruolo": "Portiere",
-    "bandiera": "https://flagcdn.com/w80/fr.png"
+    "cittadinanza": "Francese",
+    "nazionalita_nascita": "Francese",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/fr.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/fr.png"
   },
   {
     "nome": "Pietro Terracciano",
     "data_nascita": "1990-03-08",
+    "luogo_nascita": "Napoli, Italia",
     "numero_di_maglia": "1",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/96254-1753403934.jpg?lm=1",
     "ruolo": "Portiere",
-    "bandiera": "https://flagcdn.com/w80/it.png"
+    "cittadinanza": "Italiana",
+    "nazionalita_nascita": "Italiana",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/it.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/it.png"
   },
   {
     "nome": "Lorenzo Torriani",
     "data_nascita": "2005-01-31",
+    "luogo_nascita": "Milano, Italia",
     "numero_di_maglia": "96",
     "immagine": "https://tmssl.akamaized.net/images/foto/galerie/lorenzo-torriani-milan-2024-2025-1726642252-148361.jpg",
     "ruolo": "Portiere",
-    "bandiera": "https://flagcdn.com/w80/it.png"
+    "cittadinanza": "Italiana",
+    "nazionalita_nascita": "Italiana",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/it.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/it.png"
   },
   {
     "nome": "Koni De Winter",
     "data_nascita": "2002-06-12",
+    "luogo_nascita": "Lier, Belgio",
     "numero_di_maglia": "5",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/490384-1730126791.jpg?lm=1",
     "ruolo": "Difensore",
-    "bandiera": "https://flagcdn.com/w80/be.png"
+    "cittadinanza": "Belga",
+    "nazionalita_nascita": "Belga",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/be.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/be.png"
   },
   {
     "nome": "Fikayo Tomori",
     "data_nascita": "1997-12-19",
+    "luogo_nascita": "Calgary, Canada",
     "numero_di_maglia": "23",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/303254-1684856117.jpg?lm=1",
     "ruolo": "Difensore",
-    "bandiera": "https://flagcdn.com/w80/gb-eng.png"
+    "cittadinanza": "Inglese",
+    "nazionalita_nascita": "Canadese",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/gb-eng.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/ca.png"
   },
   {
     "nome": "Strahinja Pavlovic",
     "data_nascita": "2001-05-24",
+    "luogo_nascita": "Belgrado, Serbia",
     "numero_di_maglia": "31",
     "immagine": "https://assets-eu-01.kc-usercontent.com/1293c890-579f-01b7-8480-902cca7de55e/9497f941-f39e-4880-98a5-2e6dde3bfea2/Pavlovic-Large.png",
     "ruolo": "Difensore",
-    "bandiera": "https://flagcdn.com/w80/rs.png"
+    "cittadinanza": "Serba",
+    "nazionalita_nascita": "Serba",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/rs.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/rs.png"
   },
   {
     "nome": "Matteo Gabbia",
     "data_nascita": "1999-10-21",
+    "luogo_nascita": "Busto Arsizio, Italia",
     "numero_di_maglia": "46",
     "immagine": "https://assets-eu-01.kc-usercontent.com/1293c890-579f-01b7-8480-902cca7de55e/8c9217d5-1a36-4551-ac9b-29f15e081041/Gabbia-Large.png",
     "ruolo": "Difensore",
-    "bandiera": "https://flagcdn.com/w80/it.png"
+    "cittadinanza": "Italiana",
+    "nazionalita_nascita": "Italiana",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/it.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/it.png"
   },
   {
     "nome": "David Odogu",
     "data_nascita": "2006-06-03",
+    "luogo_nascita": "Berlino, Germania",
     "numero_di_maglia": "27",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/897423-1724771146.jpg?lm=1",
     "ruolo": "Difensore",
-    "bandiera": "https://flagcdn.com/w80/de.png"
+    "cittadinanza": "Tedesca",
+    "nazionalita_nascita": "Tedesca",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/de.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/de.png"
   },
   {
     "nome": "Pervis Estupinan",
     "data_nascita": "1998-01-21",
+    "luogo_nascita": "Esmeraldas, Ecuador",
     "numero_di_maglia": "2",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/349599-1668498118.jpg?lm=1",
     "ruolo": "Difensore",
-    "bandiera": "https://flagcdn.com/w80/ec.png"
+    "cittadinanza": "Ecuadoriana",
+    "nazionalita_nascita": "Ecuadoriana",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/ec.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/ec.png"
   },
   {
     "nome": "Davide Bartesaghi",
     "data_nascita": "2005-12-29",
+    "luogo_nascita": "Bergamo, Italia",
     "numero_di_maglia": "33",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/887638-1695108454.jpg?lm=1",
     "ruolo": "Difensore",
-    "bandiera": "https://flagcdn.com/w80/it.png"
+    "cittadinanza": "Italiana",
+    "nazionalita_nascita": "Italiana",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/it.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/it.png"
   },
   {
     "nome": "Zachary Athekame",
     "data_nascita": "2004-12-13",
+    "luogo_nascita": "Losanna, Svizzera",
     "numero_di_maglia": "24",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/990637-1733948149.jpg?lm=1",
     "ruolo": "Difensore",
-    "bandiera": "https://flagcdn.com/w80/gb-eng.png"
+    "cittadinanza": "Svizzera",
+    "nazionalita_nascita": "Svizzera",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/ch.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/ch.png"
   },
   {
     "nome": "Ardon Jashari",
     "data_nascita": "2002-07-30",
+    "luogo_nascita": "Lucerna, Svizzera",
     "numero_di_maglia": "30",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/608172-1734438792.jpg?lm=1",
     "ruolo": "Centrocampista",
-    "bandiera": "https://flagcdn.com/w80/ch.png"
+    "cittadinanza": "Svizzera",
+    "nazionalita_nascita": "Svizzera",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/ch.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/ch.png"
   },
   {
     "nome": "Samuele Ricci",
     "data_nascita": "2001-08-21",
+    "luogo_nascita": "Pontedera, Italia",
     "numero_di_maglia": "4",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/467992-1730125512.jpg?lm=1",
     "ruolo": "Centrocampista",
-    "bandiera": "https://flagcdn.com/w80/it.png"
+    "cittadinanza": "Italiana",
+    "nazionalita_nascita": "Italiana",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/it.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/it.png"
   },
   {
     "nome": "Youssouf Fofana",
     "data_nascita": "1999-01-10",
+    "luogo_nascita": "Parigi, Francia",
     "numero_di_maglia": "29",
     "immagine": "https://assets-eu-01.kc-usercontent.com/1293c890-579f-01b7-8480-902cca7de55e/a3a5d279-e616-48aa-9e76-dd87a83b61de/Fofana-Large.png?w=undefined&h=498&dpr=2&auto=format",
     "ruolo": "Centrocampista",
-    "bandiera": "https://flagcdn.com/w80/fr.png"
+    "cittadinanza": "Francese",
+    "nazionalita_nascita": "Francese",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/fr.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/fr.png"
   },
   {
     "nome": "Adrien Rabiot",
     "data_nascita": "1995-04-03",
+    "luogo_nascita": "Saint-Maurice, Francia",
     "numero_di_maglia": "12",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/182913-1681462009.jpg?lm=1",
     "ruolo": "Centrocampista",
-    "bandiera": "https://flagcdn.com/w80/fr.png"
+    "cittadinanza": "Francese",
+    "nazionalita_nascita": "Francese",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/fr.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/fr.png"
   },
   {
     "nome": "Luka Modric",
     "data_nascita": "1985-09-09",
+    "luogo_nascita": "Zara, Croazia",
     "numero_di_maglia": "14",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/27992-1687776160.jpg?lm=1",
     "ruolo": "Centrocampista",
-    "bandiera": "https://flagcdn.com/w80/hr.png"
+    "cittadinanza": "Croata",
+    "nazionalita_nascita": "Croata",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/hr.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/hr.png"
   },
   {
     "nome": "Ruben Loftus-Cheek",
     "data_nascita": "1996-01-23",
+    "luogo_nascita": "Londra, Inghilterra",
     "numero_di_maglia": "8",
     "immagine": "https://www.lottomatica.sport/app/uploads/sites/2/2024/08/2024-08-04_ruben_loftus_cheek_milan.jpg",
     "ruolo": "Centrocampista",
-    "bandiera": "https://flagcdn.com/w80/gb-eng.png"
+    "cittadinanza": "Inglese",
+    "nazionalita_nascita": "Inglese",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/gb-eng.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/gb-eng.png"
   },
   {
     "nome": "Rafael Leao",
     "data_nascita": "1999-06-10",
+    "luogo_nascita": "Almada, Portogallo",
     "numero_di_maglia": "10",
     "immagine": "https://www.dailymilan.it/wp-content/uploads/2024/08/orizzontale.leao_.milan_.2023.24.sguardo.2100x1261.jpg",
     "ruolo": "Attaccante",
-    "bandiera": "https://flagcdn.com/w80/pt.png"
+    "cittadinanza": "Portoghese",
+    "nazionalita_nascita": "Portoghese",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/pt.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/pt.png"
   },
   {
     "nome": "Christian Pulisic",
     "data_nascita": "1998-09-18",
+    "luogo_nascita": "Hershey, USA",
     "numero_di_maglia": "11",
     "immagine": "https://www.dailymilan.it/wp-content/uploads/2024/09/pulisic.inter_.milanjpg.jpg",
     "ruolo": "Attaccante",
-    "bandiera": "https://flagcdn.com/w80/us.png"
+    "cittadinanza": "Americana",
+    "nazionalita_nascita": "Americana",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/us.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/us.png"
   },
   {
     "nome": "Alexis Saelemakers",
     "data_nascita": "1999-06-27",
+    "luogo_nascita": "Berchem-Sainte-Agathe, Belgio",
     "numero_di_maglia": "56",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/381950-1757604189.jpg?lm=1",
     "ruolo": "Centrocampista",
-    "bandiera": "https://flagcdn.com/w80/be.png"
+    "cittadinanza": "Belga",
+    "nazionalita_nascita": "Belga",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/be.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/be.png"
   },
   {
     "nome": "Santiago Gimenez",
     "data_nascita": "2001-04-18",
+    "luogo_nascita": "Buenos Aires, Argentina",
     "numero_di_maglia": "7",
     "immagine": "https://milanreports.com/wp-content/uploads/2025/02/2197993968_f-2-scaled.jpg",
     "ruolo": "Attaccante",
-    "bandiera": "https://flagcdn.com/w80/mx.png"
+    "cittadinanza": "Messicana",
+    "nazionalita_nascita": "Argentina",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/mx.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/ar.png"
   },
   {
     "nome": "Christopher Nkunku",
     "data_nascita": "1997-11-14",
+    "luogo_nascita": "Lagny-sur-Marne, Francia",
     "numero_di_maglia": "18",
     "immagine": "https://img.a.transfermarkt.technology/portrait/header/344381-1663686834.jpg?lm=1",
     "ruolo": "Attaccante",
-    "bandiera": "https://flagcdn.com/w80/fr.png"
+    "cittadinanza": "Francese",
+    "nazionalita_nascita": "Francese",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/fr.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/fr.png"
   },
   {
     "nome": "Niclas Füllkrug",
     "data_nascita": "1993-02-09",
+    "luogo_nascita": "Hannover, Germania",
     "numero_di_maglia": "9",
     "immagine": "https://images.daznservices.com/di/library/DAZN_News/24/23/deutschland-fullkrug-testspiel-28032023_tuqo1jbidxzj1l3in75ic0mf6.jpg?t=279203887",
     "ruolo": "Attaccante",
-    "bandiera": "https://flagcdn.com/w80/de.png"
+    "cittadinanza": "Tedesca",
+    "nazionalita_nascita": "Tedesca",
+    "bandiera_cittadinanza": "https://flagcdn.com/w80/de.png",
+    "bandiera_nascita": "https://flagcdn.com/w80/de.png"
   }
 ]
