@@ -104,12 +104,18 @@ document.addEventListener("DOMContentLoaded", () => {
     if (player.bandiera_cittadinanza) {
       return [player.bandiera_cittadinanza];
     }
+    if (player.bandiera) {
+      return [player.bandiera];
+    }
     return [];
   };
 
   const getBirthFlags = (player) => {
     if (player.bandiera_nascita) {
       return [player.bandiera_nascita];
+    }
+    if (player.bandiera) {
+      return [player.bandiera];
     }
     return [];
   };
@@ -119,7 +125,11 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const getBirthDisplay = (player) => {
-    return player.nazionalita_nascita || "Nazionalità sconosciuta";
+    return player.nazionalita_nascita || player.cittadinanza || "Nazione sconosciuta";
+  };
+
+  const getBirthPlace = (player) => {
+    return player.luogo_nascita || "Luogo di nascita sconosciuto";
   };
 
   const hasDualNationality = (player) => {
@@ -144,131 +154,157 @@ document.addEventListener("DOMContentLoaded", () => {
       .getElementById("player-card-template")
       .content.cloneNode(true)
       .querySelector(".card");
+    
+    // Aggiungi classe per scroll
+    card.classList.add("scrollable-card");
     card.style.setProperty("--i", index);
 
     const img = card.querySelector(".card-img");
-    img.src = player.immagine;
-    img.alt = player.nome;
-    img.loading = "lazy";
-    img.decoding = "async";
-    withFallback(
-      img,
-      player.nome
-        .split(" ")
-        .map((s) => s[0])
-        .join(""),
-    );
+    if (img) {
+      img.src = player.immagine;
+      img.alt = player.nome;
+      img.loading = "lazy";
+      img.decoding = "async";
+      withFallback(
+        img,
+        player.nome
+          .split(" ")
+          .map((s) => s[0])
+          .join(""),
+      );
+    }
 
-    card.querySelectorAll("h3").forEach((el) => (el.textContent = player.nome));
-    card
-      .querySelectorAll(".maglia")
-      .forEach((el) => (el.textContent = player.numero_di_maglia));
+    // Nome giocatore
+    const nameEl = card.querySelector(".player-name");
+    if (nameEl) nameEl.textContent = player.nome;
 
-    // Data di nascita + luogo + età
+    // Numero maglia
+    const magliaEl = card.querySelector(".maglia");
+    if (magliaEl) magliaEl.textContent = player.numero_di_maglia;
+
+    // Data di nascita + età
     const birthSpan = card.querySelector(".birth-date");
-    const birthDateObj = new Date(player.data_nascita);
-    const age = calculateAge(birthDateObj);
-    let birthHTML = `Nato il <span class="formatted-date">${formatDate(player.data_nascita)}</span>`;
-    if (player.luogo_nascita) {
-      birthHTML += ` a <span class="birth-place">${player.luogo_nascita}</span>`;
+    if (birthSpan) {
+      const birthDateObj = new Date(player.data_nascita);
+      const age = calculateAge(birthDateObj);
+      let birthHTML = `Nato il <span class="formatted-date">${formatDate(player.data_nascita)}</span>`;
+      if (age !== null) {
+        birthHTML += ` <span class="age">(${age} anni – stagione ${seasonDisplay})</span>`;
+      }
+      birthSpan.innerHTML = birthHTML;
     }
-    if (age !== null) {
-      birthHTML += ` <span class="age">(${age} anni – stagione ${seasonDisplay})</span>`;
-    }
-    birthSpan.innerHTML = birthHTML;
 
-    card.querySelector(".role").textContent = player.ruolo || "Ruolo sconosciuto";
+    // Ruolo
+    const roleEl = card.querySelector(".role");
+    if (roleEl) roleEl.textContent = player.ruolo || "Ruolo sconosciuto";
 
-    // --- GESTIONE NAZIONALITÀ - SOLO BANDIERE (SENZA TESTO) ---
+    // --- GESTIONE NAZIONALITÀ - CITTADINANZA & NAZIONE DI NASCITA ---
     const nationalityEl = card.querySelector(".nationality");
     if (nationalityEl) {
       nationalityEl.innerHTML = '';
       
-      const hasDual = hasDualNationality(player);
-      
-      // Container per le informazioni sulla nazionalità
+      // Container per le informazioni
       const infoContainer = document.createElement("div");
       infoContainer.className = "nationality-info";
       infoContainer.style.display = "flex";
       infoContainer.style.flexDirection = "column";
       infoContainer.style.gap = "6px";
       infoContainer.style.width = "100%";
+      infoContainer.style.padding = "2px 0";
 
       // 1. CITTADINANZA (sempre presente)
       const citizenshipRow = document.createElement("div");
       citizenshipRow.className = "nationality-row";
       citizenshipRow.style.display = "flex";
-      citizenshipRow.style.alignItems = "center";
-      citizenshipRow.style.gap = "8px";
-      citizenshipRow.style.padding = "4px 0";
+      citizenshipRow.style.flexDirection = "column";
+      citizenshipRow.style.gap = "3px";
       
       const citizenshipLabel = document.createElement("span");
       citizenshipLabel.className = "nationality-label";
       citizenshipLabel.textContent = "Cittadinanza:";
-      citizenshipLabel.style.fontSize = "0.8rem";
-      citizenshipLabel.style.fontWeight = "bold";
+      citizenshipLabel.style.fontSize = "0.7rem";
+      citizenshipLabel.style.fontWeight = "700";
+      citizenshipLabel.style.textTransform = "uppercase";
+      citizenshipLabel.style.letterSpacing = "0.5px";
       citizenshipLabel.style.color = "#FDB813";
-      citizenshipLabel.style.minWidth = "110px";
-      citizenshipLabel.style.flexShrink = "0";
       
       const citizenshipFlags = getCitizenshipFlags(player);
+      const citizenshipText = getCitizenshipDisplay(player);
       
       const citizenshipValue = document.createElement("span");
       citizenshipValue.className = "nationality-value";
       citizenshipValue.style.display = "flex";
       citizenshipValue.style.alignItems = "center";
-      citizenshipValue.style.gap = "4px";
+      citizenshipValue.style.gap = "8px";
       citizenshipValue.style.flexWrap = "wrap";
+      citizenshipValue.style.padding = "2px 0";
       
-      // Aggiungi solo bandiere di cittadinanza (senza testo)
-      citizenshipFlags.forEach(flag => {
+      // Aggiungi bandiera di cittadinanza
+      if (citizenshipFlags.length > 0) {
         citizenshipValue.appendChild(
-          createFlagElement(flag, "Cittadinanza", "flag-small", "Cittadinanza")
+          createFlagElement(citizenshipFlags[0], citizenshipText, "flag-small", `Cittadinanza: ${citizenshipText}`)
         );
-      });
+      }
+      
+      // Aggiungi testo della cittadinanza
+      const textSpan = document.createElement("span");
+      textSpan.textContent = citizenshipText;
+      textSpan.style.color = "#FFFFFF";
+      textSpan.style.fontSize = "0.9rem";
+      textSpan.style.fontWeight = "500";
+      textSpan.style.textShadow = "0 1px 4px rgba(0,0,0,0.6)";
+      citizenshipValue.appendChild(textSpan);
       
       citizenshipRow.appendChild(citizenshipLabel);
       citizenshipRow.appendChild(citizenshipValue);
       infoContainer.appendChild(citizenshipRow);
 
-      // 2. NAZIONALITÀ DI NASCITA (solo se diversa dalla cittadinanza)
-      if (hasDual) {
-        const birthRow = document.createElement("div");
-        birthRow.className = "nationality-row";
-        birthRow.style.display = "flex";
-        birthRow.style.alignItems = "center";
-        birthRow.style.gap = "8px";
-        birthRow.style.padding = "4px 0";
-        
-        const birthLabel = document.createElement("span");
-        birthLabel.className = "nationality-label";
-        birthLabel.textContent = "Nazionalità di nascita:";
-        birthLabel.style.fontSize = "0.8rem";
-        birthLabel.style.fontWeight = "bold";
-        birthLabel.style.color = "#64B5F6";
-        birthLabel.style.minWidth = "110px";
-        birthLabel.style.flexShrink = "0";
-        
-        const birthFlags = getBirthFlags(player);
-        
-        const birthValue = document.createElement("span");
-        birthValue.className = "nationality-value";
-        birthValue.style.display = "flex";
-        birthValue.style.alignItems = "center";
-        birthValue.style.gap = "4px";
-        birthValue.style.flexWrap = "wrap";
-        
-        // Aggiungi solo bandiere di nascita (senza testo)
-        birthFlags.forEach(flag => {
-          birthValue.appendChild(
-            createFlagElement(flag, "Nascita", "flag-small", "Nazionalità di nascita")
-          );
-        });
-        
-        birthRow.appendChild(birthLabel);
-        birthRow.appendChild(birthValue);
-        infoContainer.appendChild(birthRow);
+      // 2. NAZIONE DI NASCITA (sempre presente - usa cittadinanza se non specificata)
+      const birthRow = document.createElement("div");
+      birthRow.className = "nationality-row";
+      birthRow.style.display = "flex";
+      birthRow.style.flexDirection = "column";
+      birthRow.style.gap = "3px";
+      
+      const birthLabel = document.createElement("span");
+      birthLabel.className = "nationality-label birth-label";
+      birthLabel.textContent = "Nazione di nascita:";
+      birthLabel.style.fontSize = "0.7rem";
+      birthLabel.style.fontWeight = "700";
+      birthLabel.style.textTransform = "uppercase";
+      birthLabel.style.letterSpacing = "0.5px";
+      birthLabel.style.color = "#64B5F6";
+      
+      const birthText = getBirthDisplay(player);
+      const birthFlags = getBirthFlags(player);
+      
+      const birthValue = document.createElement("span");
+      birthValue.className = "nationality-value";
+      birthValue.style.display = "flex";
+      birthValue.style.alignItems = "center";
+      birthValue.style.gap = "8px";
+      birthValue.style.flexWrap = "wrap";
+      birthValue.style.padding = "2px 0";
+      
+      // Aggiungi bandiera di nascita
+      if (birthFlags.length > 0) {
+        birthValue.appendChild(
+          createFlagElement(birthFlags[0], birthText, "flag-small", `Nazione di nascita: ${birthText}`)
+        );
       }
+      
+      // Aggiungi testo della nazione di nascita
+      const textSpan2 = document.createElement("span");
+      textSpan2.textContent = birthText;
+      textSpan2.style.color = "#FFFFFF";
+      textSpan2.style.fontSize = "0.9rem";
+      textSpan2.style.fontWeight = "500";
+      textSpan2.style.textShadow = "0 1px 4px rgba(0,0,0,0.6)";
+      birthValue.appendChild(textSpan2);
+      
+      birthRow.appendChild(birthLabel);
+      birthRow.appendChild(birthValue);
+      infoContainer.appendChild(birthRow);
 
       nationalityEl.appendChild(infoContainer);
     }
@@ -303,22 +339,11 @@ document.addEventListener("DOMContentLoaded", () => {
       
       if (term === "") return true;
       
-      // Cerca per nome
       if (p.nome.toLowerCase().includes(term)) return true;
-      
-      // Cerca per numero maglia
       if (p.numero_di_maglia.toString().includes(term)) return true;
-      
-      // Cerca per cittadinanza
       if (p.cittadinanza?.toLowerCase().includes(term)) return true;
-      
-      // Cerca per nazionalità di nascita
       if (p.nazionalita_nascita?.toLowerCase().includes(term)) return true;
-      
-      // Cerca per luogo di nascita
       if (p.luogo_nascita?.toLowerCase().includes(term)) return true;
-      
-      // Cerca per ruolo
       if (p.ruolo?.toLowerCase().includes(term)) return true;
       
       return false;
@@ -437,7 +462,6 @@ document.addEventListener("DOMContentLoaded", () => {
           const hasDual = hasDualNationality(player);
           let flagHTML = '';
           
-          // Mostra bandiera di cittadinanza
           const citizenshipFlags = getCitizenshipFlags(player);
           if (citizenshipFlags.length > 0) {
             flagHTML += citizenshipFlags.map(f => 
@@ -445,10 +469,9 @@ document.addEventListener("DOMContentLoaded", () => {
             ).join('');
           }
           
-          // Se c'è doppia nazionalità, mostra anche bandiera di nascita
           if (hasDual) {
             const birthFlags = getBirthFlags(player);
-            if (birthFlags.length > 0) {
+            if (birthFlags.length > 0 && birthFlags[0] !== citizenshipFlags[0]) {
               flagHTML += birthFlags.map(f => 
                 `<img src="${f}" class="suggestion-flag" style="width:20px;height:13px;object-fit:cover;border-radius:2px;margin-right:2px;opacity:0.7;" alt="Nascita" loading="lazy" title="Nazionalità di nascita">`
               ).join('');
@@ -456,8 +479,9 @@ document.addEventListener("DOMContentLoaded", () => {
           }
 
           let nationalityText = getCitizenshipDisplay(player);
-          if (hasDual) {
-            nationalityText += ` (nato ${getBirthDisplay(player)})`;
+          const birthText = getBirthDisplay(player);
+          if (birthText && birthText !== nationalityText) {
+            nationalityText += ` (nato ${birthText})`;
           }
 
           item.innerHTML = `
