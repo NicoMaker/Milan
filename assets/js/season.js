@@ -162,14 +162,42 @@ document.addEventListener("DOMContentLoaded", () => {
     return flagImg;
   };
 
+  // Icone usate nelle righe informative del retro della card.
+  const ROW_ICONS = {
+    calendar: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`,
+    pin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
+    flag: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4M4 4h14l-2 4 2 4H4"/></svg>`,
+    globe: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20Z"/></svg>`,
+  };
+
+  // Crea una riga informativa <div class="info-row"> con etichetta e valore,
+  // pensata per il retro "passaporto" della card, scorrevole se serve.
+  const createInfoRow = (iconKey, label, valueNode) => {
+    const row = document.createElement("div");
+    row.className = "info-row";
+
+    const labelEl = document.createElement("span");
+    labelEl.className = "info-label";
+    labelEl.innerHTML = `${ROW_ICONS[iconKey] || ""}<span>${label}</span>`;
+
+    const valueEl = document.createElement("span");
+    valueEl.className = "info-value";
+    if (typeof valueNode === "string") {
+      valueEl.innerHTML = valueNode;
+    } else {
+      valueEl.appendChild(valueNode);
+    }
+
+    row.append(labelEl, valueEl);
+    return row;
+  };
+
   const createPlayerCard = (player, index) => {
     const card = document
       .getElementById("player-card-template")
       .content.cloneNode(true)
       .querySelector(".card");
 
-    // Aggiungi classe per scroll
-    card.classList.add("scrollable-card");
     card.style.setProperty("--i", index);
 
     // Salva il nome del giocatore per riferimento
@@ -190,75 +218,43 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }
 
-    // Nome giocatore
-    const nameEl = card.querySelector(".player-name");
-    if (nameEl) nameEl.textContent = player.nome;
+    // Nome giocatore (fronte + retro)
+    card
+      .querySelectorAll(".player-name")
+      .forEach((el) => (el.textContent = player.nome));
 
-    // Numero maglia
-    const magliaEl = card.querySelector(".maglia");
-    if (magliaEl) magliaEl.textContent = player.numero_di_maglia;
+    // Numero maglia (fronte + retro)
+    card
+      .querySelectorAll(".jersey-chip")
+      .forEach((el) => (el.textContent = player.numero_di_maglia));
 
-    // Data di nascita + età
-    const birthSpan = card.querySelector(".birth-date");
-    if (birthSpan) {
+    // Ruolo (fronte + timbro sul retro)
+    card
+      .querySelectorAll(".player-role")
+      .forEach((el) => (el.textContent = player.ruolo || "Ruolo sconosciuto"));
+
+    // --- RETRO: righe informative scorrevoli ---
+    const infoList = card.querySelector(".info-list");
+    if (infoList) {
+      // 1. Data di nascita + età
       const birthDateObj = new Date(player.data_nascita);
       const age = calculateAge(birthDateObj);
-      let birthHTML = `Nato il <span class="formatted-date">${formatDate(player.data_nascita)}</span>`;
+      let birthHTML = formatDate(player.data_nascita);
       if (age !== null) {
-        birthHTML += ` <span class="age">(${age} anni – stagione ${seasonDisplay})</span>`;
+        birthHTML += ` <span class="age-badge">${age} anni</span>`;
       }
-      birthSpan.innerHTML = birthHTML;
-    }
+      infoList.appendChild(createInfoRow("calendar", "Nato il", birthHTML));
 
-    // Ruolo
-    const roleEl = card.querySelector(".role");
-    if (roleEl) roleEl.textContent = player.ruolo || "Ruolo sconosciuto";
+      // 2. Luogo di nascita
+      infoList.appendChild(
+        createInfoRow("pin", "Luogo di nascita", getBirthPlace(player)),
+      );
 
-    // --- GESTIONE NAZIONALITÀ - CITTADINANZA & NAZIONE DI NASCITA ---
-    const nationalityEl = card.querySelector(".nationality");
-    if (nationalityEl) {
-      nationalityEl.innerHTML = "";
-
-      // Container per le informazioni
-      const infoContainer = document.createElement("div");
-      infoContainer.className = "nationality-info";
-      infoContainer.style.display = "flex";
-      infoContainer.style.flexDirection = "column";
-      infoContainer.style.gap = "4px";
-      infoContainer.style.width = "100%";
-      infoContainer.style.padding = "2px 0";
-
-      // 1. CITTADINANZA (sempre presente)
-      const citizenshipRow = document.createElement("div");
-      citizenshipRow.className = "nationality-row";
-      citizenshipRow.style.display = "flex";
-      citizenshipRow.style.alignItems = "center";
-      citizenshipRow.style.gap = "6px";
-      citizenshipRow.style.width = "100%";
-      citizenshipRow.style.justifyContent = "center";
-
-      const citizenshipLabel = document.createElement("span");
-      citizenshipLabel.className = "nationality-label";
-      citizenshipLabel.textContent = "Cittadinanza:";
-      citizenshipLabel.style.fontSize = "0.6rem";
-      citizenshipLabel.style.fontWeight = "700";
-      citizenshipLabel.style.textTransform = "uppercase";
-      citizenshipLabel.style.letterSpacing = "0.5px";
-      citizenshipLabel.style.color = "#FDB813";
-      citizenshipLabel.style.minWidth = "80px";
-      citizenshipLabel.style.textAlign = "right";
-
+      // 3. Cittadinanza
       const citizenshipFlags = getCitizenshipFlags(player);
       const citizenshipText = getCitizenshipDisplay(player);
-
       const citizenshipValue = document.createElement("span");
-      citizenshipValue.className = "nationality-value";
-      citizenshipValue.style.display = "flex";
-      citizenshipValue.style.alignItems = "center";
-      citizenshipValue.style.gap = "4px";
-      citizenshipValue.style.flexWrap = "wrap";
-
-      // Aggiungi bandiera di cittadinanza
+      citizenshipValue.style.display = "contents";
       if (citizenshipFlags.length > 0) {
         citizenshipValue.appendChild(
           createFlagElement(
@@ -269,74 +265,36 @@ document.addEventListener("DOMContentLoaded", () => {
           ),
         );
       }
+      const citizenshipText_ = document.createElement("span");
+      citizenshipText_.textContent = citizenshipText;
+      citizenshipValue.appendChild(citizenshipText_);
+      infoList.appendChild(
+        createInfoRow("flag", "Cittadinanza", citizenshipValue),
+      );
 
-      // Aggiungi testo della cittadinanza
-      const textSpan = document.createElement("span");
-      textSpan.textContent = citizenshipText;
-      textSpan.style.color = "#000000";
-      textSpan.style.fontSize = "0.8rem";
-      textSpan.style.fontWeight = "500";
-      citizenshipValue.appendChild(textSpan);
-
-      citizenshipRow.appendChild(citizenshipLabel);
-      citizenshipRow.appendChild(citizenshipValue);
-      infoContainer.appendChild(citizenshipRow);
-
-      // 2. NAZIONE DI NASCITA (sempre presente)
-      const birthRow = document.createElement("div");
-      birthRow.className = "nationality-row";
-      birthRow.style.display = "flex";
-      birthRow.style.alignItems = "center";
-      birthRow.style.gap = "6px";
-      birthRow.style.width = "100%";
-      birthRow.style.justifyContent = "center";
-
-      const birthLabel = document.createElement("span");
-      birthLabel.className = "nationality-label birth-label";
-      birthLabel.textContent = "Nazione nascita:";
-      birthLabel.style.fontSize = "0.6rem";
-      birthLabel.style.fontWeight = "700";
-      birthLabel.style.textTransform = "uppercase";
-      birthLabel.style.letterSpacing = "0.5px";
-      birthLabel.style.color = "#64B5F6";
-      birthLabel.style.minWidth = "80px";
-      birthLabel.style.textAlign = "right";
-
-      const birthText = getBirthDisplay(player);
-      const birthFlags = getBirthFlags(player);
-
-      const birthValue = document.createElement("span");
-      birthValue.className = "nationality-value";
-      birthValue.style.display = "flex";
-      birthValue.style.alignItems = "center";
-      birthValue.style.gap = "4px";
-      birthValue.style.flexWrap = "wrap";
-
-      // Aggiungi bandiera di nascita
-      if (birthFlags.length > 0) {
-        birthValue.appendChild(
-          createFlagElement(
-            birthFlags[0],
-            birthText,
-            "flag-small",
-            `Nazione di nascita: ${birthText}`,
-          ),
+      // 4. Nazionalità di nascita, solo se diversa dalla cittadinanza
+      if (hasDualNationality(player)) {
+        const birthText = getBirthDisplay(player);
+        const birthFlags = getBirthFlags(player);
+        const birthValue = document.createElement("span");
+        birthValue.style.display = "contents";
+        if (birthFlags.length > 0) {
+          birthValue.appendChild(
+            createFlagElement(
+              birthFlags[0],
+              birthText,
+              "flag-small",
+              `Nazione di nascita: ${birthText}`,
+            ),
+          );
+        }
+        const birthTextSpan = document.createElement("span");
+        birthTextSpan.textContent = birthText;
+        birthValue.appendChild(birthTextSpan);
+        infoList.appendChild(
+          createInfoRow("globe", "Nato in", birthValue),
         );
       }
-
-      // Aggiungi testo della nazione di nascita
-      const textSpan2 = document.createElement("span");
-      textSpan2.textContent = birthText;
-      textSpan2.style.color = "#000000";
-      textSpan2.style.fontSize = "0.8rem";
-      textSpan2.style.fontWeight = "500";
-      birthValue.appendChild(textSpan2);
-
-      birthRow.appendChild(birthLabel);
-      birthRow.appendChild(birthValue);
-      infoContainer.appendChild(birthRow);
-
-      nationalityEl.appendChild(infoContainer);
     }
 
     // --- GESTIONE CLICK PER APRIRE/CHIUDERE IL RETRO ---
