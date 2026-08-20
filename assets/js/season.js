@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const getBirthFlags = (player) => {
-    if (player.bandiera_nascita) {
+    if (player.bandiera_nascita && player.bandiera_nascita !== player.bandiera_cittadinanza) {
       return [player.bandiera_nascita];
     }
     if (player.bandiera) {
@@ -158,6 +158,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Aggiungi classe per scroll
     card.classList.add("scrollable-card");
     card.style.setProperty("--i", index);
+
+    // Salva il nome del giocatore per riferimento
+    card.dataset.playerName = player.nome;
 
     const img = card.querySelector(".card-img");
     if (img) {
@@ -208,7 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
       infoContainer.className = "nationality-info";
       infoContainer.style.display = "flex";
       infoContainer.style.flexDirection = "column";
-      infoContainer.style.gap = "6px";
+      infoContainer.style.gap = "4px";
       infoContainer.style.width = "100%";
       infoContainer.style.padding = "2px 0";
 
@@ -216,17 +219,21 @@ document.addEventListener("DOMContentLoaded", () => {
       const citizenshipRow = document.createElement("div");
       citizenshipRow.className = "nationality-row";
       citizenshipRow.style.display = "flex";
-      citizenshipRow.style.flexDirection = "column";
-      citizenshipRow.style.gap = "3px";
+      citizenshipRow.style.alignItems = "center";
+      citizenshipRow.style.gap = "6px";
+      citizenshipRow.style.width = "100%";
+      citizenshipRow.style.justifyContent = "center";
       
       const citizenshipLabel = document.createElement("span");
       citizenshipLabel.className = "nationality-label";
       citizenshipLabel.textContent = "Cittadinanza:";
-      citizenshipLabel.style.fontSize = "0.7rem";
+      citizenshipLabel.style.fontSize = "0.6rem";
       citizenshipLabel.style.fontWeight = "700";
       citizenshipLabel.style.textTransform = "uppercase";
       citizenshipLabel.style.letterSpacing = "0.5px";
       citizenshipLabel.style.color = "#FDB813";
+      citizenshipLabel.style.minWidth = "80px";
+      citizenshipLabel.style.textAlign = "right";
       
       const citizenshipFlags = getCitizenshipFlags(player);
       const citizenshipText = getCitizenshipDisplay(player);
@@ -235,9 +242,8 @@ document.addEventListener("DOMContentLoaded", () => {
       citizenshipValue.className = "nationality-value";
       citizenshipValue.style.display = "flex";
       citizenshipValue.style.alignItems = "center";
-      citizenshipValue.style.gap = "8px";
+      citizenshipValue.style.gap = "4px";
       citizenshipValue.style.flexWrap = "wrap";
-      citizenshipValue.style.padding = "2px 0";
       
       // Aggiungi bandiera di cittadinanza
       if (citizenshipFlags.length > 0) {
@@ -249,31 +255,34 @@ document.addEventListener("DOMContentLoaded", () => {
       // Aggiungi testo della cittadinanza
       const textSpan = document.createElement("span");
       textSpan.textContent = citizenshipText;
-      textSpan.style.color = "#FFFFFF";
-      textSpan.style.fontSize = "0.9rem";
+      textSpan.style.color = "#000000";
+      textSpan.style.fontSize = "0.8rem";
       textSpan.style.fontWeight = "500";
-      textSpan.style.textShadow = "0 1px 4px rgba(0,0,0,0.6)";
       citizenshipValue.appendChild(textSpan);
       
       citizenshipRow.appendChild(citizenshipLabel);
       citizenshipRow.appendChild(citizenshipValue);
       infoContainer.appendChild(citizenshipRow);
 
-      // 2. NAZIONE DI NASCITA (sempre presente - usa cittadinanza se non specificata)
+      // 2. NAZIONE DI NASCITA (sempre presente)
       const birthRow = document.createElement("div");
       birthRow.className = "nationality-row";
       birthRow.style.display = "flex";
-      birthRow.style.flexDirection = "column";
-      birthRow.style.gap = "3px";
+      birthRow.style.alignItems = "center";
+      birthRow.style.gap = "6px";
+      birthRow.style.width = "100%";
+      birthRow.style.justifyContent = "center";
       
       const birthLabel = document.createElement("span");
       birthLabel.className = "nationality-label birth-label";
-      birthLabel.textContent = "Nazione di nascita:";
-      birthLabel.style.fontSize = "0.7rem";
+      birthLabel.textContent = "Nazione nascita:";
+      birthLabel.style.fontSize = "0.6rem";
       birthLabel.style.fontWeight = "700";
       birthLabel.style.textTransform = "uppercase";
       birthLabel.style.letterSpacing = "0.5px";
       birthLabel.style.color = "#64B5F6";
+      birthLabel.style.minWidth = "80px";
+      birthLabel.style.textAlign = "right";
       
       const birthText = getBirthDisplay(player);
       const birthFlags = getBirthFlags(player);
@@ -282,9 +291,8 @@ document.addEventListener("DOMContentLoaded", () => {
       birthValue.className = "nationality-value";
       birthValue.style.display = "flex";
       birthValue.style.alignItems = "center";
-      birthValue.style.gap = "8px";
+      birthValue.style.gap = "4px";
       birthValue.style.flexWrap = "wrap";
-      birthValue.style.padding = "2px 0";
       
       // Aggiungi bandiera di nascita
       if (birthFlags.length > 0) {
@@ -296,10 +304,9 @@ document.addEventListener("DOMContentLoaded", () => {
       // Aggiungi testo della nazione di nascita
       const textSpan2 = document.createElement("span");
       textSpan2.textContent = birthText;
-      textSpan2.style.color = "#FFFFFF";
-      textSpan2.style.fontSize = "0.9rem";
+      textSpan2.style.color = "#000000";
+      textSpan2.style.fontSize = "0.8rem";
       textSpan2.style.fontWeight = "500";
-      textSpan2.style.textShadow = "0 1px 4px rgba(0,0,0,0.6)";
       birthValue.appendChild(textSpan2);
       
       birthRow.appendChild(birthLabel);
@@ -309,15 +316,32 @@ document.addEventListener("DOMContentLoaded", () => {
       nationalityEl.appendChild(infoContainer);
     }
 
-    // Flip card
-    const toggle = () => card.classList.toggle("flipped");
-    card.addEventListener("click", toggle);
+    // --- GESTIONE CLICK PER APRIRE/CHIUDERE IL RETRO ---
+    let isFlipped = false;
+
+    const toggleCard = (e) => {
+      // Evita che il click su elementi interni causi problemi
+      if (e) e.stopPropagation();
+      
+      isFlipped = !isFlipped;
+      card.classList.toggle("flipped", isFlipped);
+    };
+
+    // Aggiungi event listener per click
+    card.addEventListener("click", toggleCard);
+
+    // Supporto per tastiera (accessibilità)
     card.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        toggle();
+        toggleCard(e);
       }
     });
+
+    // Aggiungi attributo per accessibilità
+    card.setAttribute("role", "button");
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("aria-label", `Mostra dettagli di ${player.nome}`);
 
     return card;
   };
