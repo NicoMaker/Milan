@@ -6,7 +6,6 @@
       "competitions": [
         { "name": "Serie A" },
         { "name": "Coppa Italia", "winner": false },
-        { "name": "Supercoppa Italiana", "winner": false },
         { "name": "Europa League", "winner": false }
       ],
       "link": "season/2026-2027/index.html"
