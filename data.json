@@ -4,7 +4,7 @@
       "year": "2026-2027", 
       "position": "da definire",
       "competitions": [
-        { "name": "Serie A" },
+        { "name": "Serie A" }, 
         { "name": "Coppa Italia", "winner": false },
         { "name": "Europa League", "winner": false }
       ],
