@@ -426,16 +426,35 @@ main {
   );
 }
 
-.card-front .card-img {
+.avatar-wrap {
   position: relative;
+  z-index: 1;
+  margin-bottom: var(--space-xs);
+}
+
+.card-front .card-img {
   width: 96px;
   height: 96px;
   object-fit: cover;
   border-radius: 50%;
   border: 3px solid var(--color-ivory);
   box-shadow: var(--shadow-soft);
-  margin-bottom: var(--space-xs);
-  z-index: 1;
+}
+
+.citizenship-flag-front {
+  position: absolute;
+  right: -4px;
+  bottom: -2px;
+  width: 26px;
+  height: 18px;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 2px solid var(--color-ivory);
+  box-shadow: var(--shadow-soft);
+}
+
+.citizenship-flag-front.hidden {
+  display: none;
 }
 
 .card-front .card-content {
@@ -632,6 +651,11 @@ main {
     height: 76px;
   }
 
+  .citizenship-flag-front {
+    width: 22px;
+    height: 15px;
+  }
+
   .nationality-label {
     font-size: 0.55rem;
     min-width: 65px;
@@ -665,6 +689,13 @@ main {
   .card-front .card-img {
     width: 60px;
     height: 60px;
+  }
+
+  .citizenship-flag-front {
+    width: 18px;
+    height: 12px;
+    right: -3px;
+    bottom: -1px;
   }
 
   .card-front .maglia {

@@ -222,6 +222,21 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }
 
+    // Bandierina di cittadinanza sul fronte, sovrapposta alla foto
+    const citizenshipFlagFront = card.querySelector(".citizenship-flag-front");
+    if (citizenshipFlagFront) {
+      const citizenshipUrl = getCitizenshipFlags(player)[0];
+      const citizenshipText = getCitizenshipDisplay(player);
+      if (citizenshipUrl) {
+        citizenshipFlagFront.src = citizenshipUrl;
+        citizenshipFlagFront.alt = `Cittadinanza: ${citizenshipText}`;
+        citizenshipFlagFront.title = `Cittadinanza: ${citizenshipText}`;
+        withFallback(citizenshipFlagFront, citizenshipText);
+      } else {
+        citizenshipFlagFront.classList.add("hidden");
+      }
+    }
+
     // Nome giocatore (fronte + retro)
     card.querySelectorAll(".card-name").forEach((el) => {
       el.textContent = player.nome;
