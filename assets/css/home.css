@@ -8,7 +8,7 @@ body {
   background-color: var(--color-black);
   background-image: radial-gradient(
     ellipse 900px 500px at 50% -10%,
-    rgba(200, 16, 46, 0.25),
+    color-mix(in srgb, var(--color-red) 25%, transparent),
     transparent 65%
   );
 }
@@ -22,11 +22,12 @@ body {
   align-items: center;
   justify-content: center;
   gap: var(--space-xs);
-  background: rgba(12, 12, 14, 0.92);
+  background: color-mix(in srgb, var(--color-black) 92%, transparent);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--color-line);
   padding: var(--space-xs) var(--space-sm);
   text-align: left;
+  view-transition-name: site-header;
 }
 
 .site-header .crest {
@@ -150,6 +151,7 @@ main {
   opacity: 0;
   animation: rise var(--dur-slow) var(--ease-out) forwards;
   animation-delay: calc(var(--i, 0) * 0.12s);
+  container-type: inline-size;
 }
 
 .timeline-entry:last-child {
@@ -194,7 +196,7 @@ main {
 .is-champion .timeline-marker::after {
   background: var(--color-gold);
   border-color: var(--color-gold);
-  box-shadow: 0 0 0 4px rgba(201, 162, 75, 0.25);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-gold) 25%, transparent);
 }
 
 .timeline-marker .marker-year-end {
@@ -219,13 +221,14 @@ main {
     box-shadow var(--dur-med) var(--ease-out);
 }
 
-.timeline-card:hover {
+.timeline-card:hover,
+.timeline-card:focus-within {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lift);
 }
 
 .is-champion .timeline-card {
-  border-color: rgba(201, 162, 75, 0.5);
+  border-color: color-mix(in srgb, var(--color-gold) 50%, transparent);
 }
 
 .card-top {
@@ -235,10 +238,6 @@ main {
   align-items: center;
   gap: var(--space-sm);
   margin-bottom: var(--space-sm);
-}
-
-.position-meta {
-  min-width: 0;
 }
 
 .position-numeral {
@@ -253,6 +252,7 @@ main {
 }
 
 .position-meta {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
@@ -281,7 +281,7 @@ main {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-gold);
-  border: 1px solid rgba(201, 162, 75, 0.5);
+  border: 1px solid color-mix(in srgb, var(--color-gold) 50%, transparent);
   border-radius: var(--radius-pill);
   padding: 0.3rem 0.7rem;
   white-space: nowrap;
@@ -336,7 +336,7 @@ main {
   display: flex;
   align-items: center;
   gap: 0.45rem;
-  background: rgba(242, 238, 227, 0.06);
+  background: var(--surface-raised);
   border: 1px solid var(--color-line);
   border-radius: var(--radius-pill);
   padding: 0.35rem 0.75rem 0.35rem 0.35rem;
@@ -353,13 +353,13 @@ main {
 }
 
 .comp-chip.won {
-  background: rgba(201, 162, 75, 0.14);
-  border-color: rgba(201, 162, 75, 0.45);
+  background: color-mix(in srgb, var(--color-gold) 14%, transparent);
+  border-color: color-mix(in srgb, var(--color-gold) 45%, transparent);
   color: var(--color-ivory);
 }
 
 .comp-chip:hover {
-  background: rgba(242, 238, 227, 0.12);
+  background: var(--surface-raised-hover);
 }
 
 .view-link {
@@ -379,7 +379,8 @@ main {
     border-color var(--dur-fast) var(--ease-out);
 }
 
-.view-link:hover {
+.view-link:hover,
+.view-link:focus-visible {
   gap: 0.65rem;
   color: var(--color-gold);
   border-color: var(--color-gold);
@@ -416,12 +417,20 @@ main {
     transform var(--dur-fast) var(--ease-out);
 }
 
-.social-links a:hover {
+.social-links a:hover,
+.social-links a:focus-visible {
   color: var(--color-red);
   transform: translateY(-2px);
 }
 
 /* --- Responsive --- */
+@container (max-width: 420px) {
+  .champion-tag,
+  .pending-tag {
+    margin-left: 0;
+  }
+}
+
 @media (max-width: 560px) {
   .timeline {
     padding-left: 3.4rem;
@@ -443,10 +452,5 @@ main {
 
   .position-numeral {
     font-size: 2.1rem;
-  }
-
-  .champion-tag,
-  .pending-tag {
-    margin-left: 0;
   }
 }

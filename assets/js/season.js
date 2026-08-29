@@ -31,20 +31,17 @@ document.addEventListener("DOMContentLoaded", () => {
     Centrocampista: "Centrocampisti",
     Attaccante: "Attaccanti",
   };
-  const MONTHS = [
-    "Gennaio",
-    "Febbraio",
-    "Marzo",
-    "Aprile",
-    "Maggio",
-    "Giugno",
-    "Luglio",
-    "Agosto",
-    "Settembre",
-    "Ottobre",
-    "Novembre",
-    "Dicembre",
-  ];
+
+  const ALL_ROLES = ["Portiere", "Difensore", "Centrocampista", "Attaccante"];
+
+  // --- Piccola utility di debounce, per non ricalcolare i suggerimenti ad ogni tasto ---
+  const debounce = (fn, delay = 150) => {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn(...args), delay);
+    };
+  };
 
   // --- Determina l'anno di inizio stagione ---
   const getSeasonStartYear = () => {
@@ -52,13 +49,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (meta) return parseInt(meta.content, 10);
     const input = document.getElementById("season-start-year");
     if (input) return parseInt(input.value, 10);
-    const path = window.location.pathname;
-    const match = path.match(/\/(\d{4})-\d{4}\//);
+    const match = window.location.pathname.match(/\/(\d{4})-\d{4}\//);
     if (match) return parseInt(match[1], 10);
     const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth();
-    return currentMonth >= 7 ? currentYear : currentYear - 1;
+    return now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1;
   };
 
   const seasonStartYear = getSeasonStartYear();
@@ -66,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Calcolo età ---
   const calculateAge = (birthDate) => {
-    if (!birthDate || isNaN(birthDate.getTime())) return null;
+    if (!birthDate || Number.isNaN(birthDate.getTime())) return null;
     const seasonStart = new Date(seasonStartYear, 7, 1);
     let age = seasonStart.getFullYear() - birthDate.getFullYear();
     const m = seasonStart.getMonth() - birthDate.getMonth();
@@ -76,10 +70,16 @@ document.addEventListener("DOMContentLoaded", () => {
     return age;
   };
 
+  const dateFormatter = new Intl.DateTimeFormat("it-IT", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     if (Number.isNaN(date.getTime())) return dateStr;
-    return `${date.getDate().toString().padStart(2, "0")} ${MONTHS[date.getMonth()]} ${date.getFullYear()}`;
+    return dateFormatter.format(date);
   };
 
   // Placeholder SVG
@@ -101,12 +101,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Funzioni per gestire cittadinanza e nascita ---
   const getCitizenshipFlags = (player) => {
-    if (player.bandiera_cittadinanza) {
-      return [player.bandiera_cittadinanza];
-    }
-    if (player.bandiera) {
-      return [player.bandiera];
-    }
+    if (player.bandiera_cittadinanza) return [player.bandiera_cittadinanza];
+    if (player.bandiera) return [player.bandiera];
     return [];
   };
 
@@ -117,41 +113,25 @@ document.addEventListener("DOMContentLoaded", () => {
     ) {
       return [player.bandiera_nascita];
     }
-    if (player.bandiera) {
-      return [player.bandiera];
-    }
+    if (player.bandiera) return [player.bandiera];
     return [];
   };
 
-  const getCitizenshipDisplay = (player) => {
-    return player.cittadinanza || "Nazionalità sconosciuta";
-  };
+  const getCitizenshipDisplay = (player) =>
+    player.cittadinanza || "Nazionalità sconosciuta";
 
-  const getBirthDisplay = (player) => {
-    return (
-      player.nazionalita_nascita || player.cittadinanza || "Nazione sconosciuta"
-    );
-  };
+  const getBirthDisplay = (player) =>
+    player.nazionalita_nascita || player.cittadinanza || "Nazione sconosciuta";
 
-  const getBirthPlace = (player) => {
-    return player.luogo_nascita || "Luogo di nascita sconosciuto";
-  };
-
-  const hasDualNationality = (player) => {
-    return (
+  const hasDualNationality = (player) =>
+    Boolean(
       player.cittadinanza &&
-      player.nazionalita_nascita &&
-      player.cittadinanza !== player.nazionalita_nascita
+        player.nazionalita_nascita &&
+        player.cittadinanza !== player.nazionalita_nascita,
     );
-  };
 
   // --- Crea elemento bandiera ---
-  const createFlagElement = (
-    flagUrl,
-    label,
-    className = "flag",
-    title = "",
-  ) => {
+  const createFlagElement = (flagUrl, label, className = "flag", title = "") => {
     const flagImg = document.createElement("img");
     flagImg.src = flagUrl;
     flagImg.alt = label || "Bandiera";
@@ -162,17 +142,69 @@ document.addEventListener("DOMContentLoaded", () => {
     return flagImg;
   };
 
+  // --- Una riga "etichetta: bandiera + testo" nel retro della card ---
+  // Sostituisce il precedente blocco di stili inline generati via JS:
+  // ora produce solo markup semantico, l'aspetto è delegato interamente a season.css.
+  const createNationalityRow = ({ label, isBirth, flagUrl, text }) => {
+    const row = document.createElement("div");
+    row.className = "nationality-row";
+
+    const labelEl = document.createElement("span");
+    labelEl.className = `nationality-label${isBirth ? " is-birth" : ""}`;
+    labelEl.textContent = label;
+    row.appendChild(labelEl);
+
+    const valueEl = document.createElement("span");
+    valueEl.className = "nationality-value";
+
+    if (flagUrl) {
+      valueEl.appendChild(
+        createFlagElement(flagUrl, text, "flag-small", `${label} ${text}`),
+      );
+    }
+
+    const textEl = document.createElement("span");
+    textEl.className = "nationality-text";
+    textEl.textContent = text;
+    valueEl.appendChild(textEl);
+
+    row.appendChild(valueEl);
+    return row;
+  };
+
+  const buildNationalityBlock = (player) => {
+    const container = document.createElement("div");
+    container.className = "nationality-info";
+
+    container.appendChild(
+      createNationalityRow({
+        label: "Cittadinanza:",
+        isBirth: false,
+        flagUrl: getCitizenshipFlags(player)[0],
+        text: getCitizenshipDisplay(player),
+      }),
+    );
+
+    container.appendChild(
+      createNationalityRow({
+        label: "Nazione nascita:",
+        isBirth: true,
+        flagUrl: getBirthFlags(player)[0],
+        text: getBirthDisplay(player),
+      }),
+    );
+
+    return container;
+  };
+
   const createPlayerCard = (player, index) => {
     const card = document
       .getElementById("player-card-template")
       .content.cloneNode(true)
       .querySelector(".card");
 
-    // Aggiungi classe per scroll
     card.classList.add("scrollable-card");
     card.style.setProperty("--i", index);
-
-    // Salva il nome del giocatore per riferimento
     card.dataset.playerName = player.nome;
 
     const img = card.querySelector(".card-img");
@@ -190,9 +222,10 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     }
 
-    // Nome giocatore
-    const nameEl = card.querySelector(".player-name");
-    if (nameEl) nameEl.textContent = player.nome;
+    // Nome giocatore (fronte + retro)
+    card.querySelectorAll(".card-name").forEach((el) => {
+      el.textContent = player.nome;
+    });
 
     // Numero maglia
     const magliaEl = card.querySelector(".maglia");
@@ -201,169 +234,45 @@ document.addEventListener("DOMContentLoaded", () => {
     // Data di nascita + età
     const birthSpan = card.querySelector(".birth-date");
     if (birthSpan) {
-      const birthDateObj = new Date(player.data_nascita);
-      const age = calculateAge(birthDateObj);
-      let birthHTML = `Nato il <span class="formatted-date">${formatDate(player.data_nascita)}</span>`;
+      birthSpan.replaceChildren();
+      birthSpan.append("Nato il ");
+      const dateSpan = document.createElement("span");
+      dateSpan.className = "formatted-date";
+      dateSpan.textContent = formatDate(player.data_nascita);
+      birthSpan.appendChild(dateSpan);
+
+      const age = calculateAge(new Date(player.data_nascita));
       if (age !== null) {
-        birthHTML += ` <span class="age">(${age} anni – stagione ${seasonDisplay})</span>`;
+        const ageSpan = document.createElement("span");
+        ageSpan.className = "age";
+        ageSpan.textContent = ` (${age} anni – stagione ${seasonDisplay})`;
+        birthSpan.appendChild(ageSpan);
       }
-      birthSpan.innerHTML = birthHTML;
     }
 
     // Ruolo
     const roleEl = card.querySelector(".role");
     if (roleEl) roleEl.textContent = player.ruolo || "Ruolo sconosciuto";
 
-    // --- GESTIONE NAZIONALITÀ - CITTADINANZA & NAZIONE DI NASCITA ---
+    // Nazionalità (cittadinanza + nascita)
     const nationalityEl = card.querySelector(".nationality");
     if (nationalityEl) {
-      nationalityEl.innerHTML = "";
-
-      // Container per le informazioni
-      const infoContainer = document.createElement("div");
-      infoContainer.className = "nationality-info";
-      infoContainer.style.display = "flex";
-      infoContainer.style.flexDirection = "column";
-      infoContainer.style.gap = "4px";
-      infoContainer.style.width = "100%";
-      infoContainer.style.padding = "2px 0";
-
-      // 1. CITTADINANZA (sempre presente)
-      const citizenshipRow = document.createElement("div");
-      citizenshipRow.className = "nationality-row";
-      citizenshipRow.style.display = "flex";
-      citizenshipRow.style.alignItems = "center";
-      citizenshipRow.style.gap = "6px";
-      citizenshipRow.style.width = "100%";
-      citizenshipRow.style.justifyContent = "center";
-
-      const citizenshipLabel = document.createElement("span");
-      citizenshipLabel.className = "nationality-label";
-      citizenshipLabel.textContent = "Cittadinanza:";
-      citizenshipLabel.style.fontSize = "0.6rem";
-      citizenshipLabel.style.fontWeight = "700";
-      citizenshipLabel.style.textTransform = "uppercase";
-      citizenshipLabel.style.letterSpacing = "0.5px";
-      citizenshipLabel.style.color = "#FDB813";
-      citizenshipLabel.style.minWidth = "80px";
-      citizenshipLabel.style.textAlign = "right";
-
-      const citizenshipFlags = getCitizenshipFlags(player);
-      const citizenshipText = getCitizenshipDisplay(player);
-
-      const citizenshipValue = document.createElement("span");
-      citizenshipValue.className = "nationality-value";
-      citizenshipValue.style.display = "flex";
-      citizenshipValue.style.alignItems = "center";
-      citizenshipValue.style.gap = "4px";
-      citizenshipValue.style.flexWrap = "wrap";
-
-      // Aggiungi bandiera di cittadinanza
-      if (citizenshipFlags.length > 0) {
-        citizenshipValue.appendChild(
-          createFlagElement(
-            citizenshipFlags[0],
-            citizenshipText,
-            "flag-small",
-            `Cittadinanza: ${citizenshipText}`,
-          ),
-        );
-      }
-
-      // Aggiungi testo della cittadinanza
-      const textSpan = document.createElement("span");
-      textSpan.textContent = citizenshipText;
-      textSpan.style.color = "#000000";
-      textSpan.style.fontSize = "0.8rem";
-      textSpan.style.fontWeight = "500";
-      citizenshipValue.appendChild(textSpan);
-
-      citizenshipRow.appendChild(citizenshipLabel);
-      citizenshipRow.appendChild(citizenshipValue);
-      infoContainer.appendChild(citizenshipRow);
-
-      // 2. NAZIONE DI NASCITA (sempre presente)
-      const birthRow = document.createElement("div");
-      birthRow.className = "nationality-row";
-      birthRow.style.display = "flex";
-      birthRow.style.alignItems = "center";
-      birthRow.style.gap = "6px";
-      birthRow.style.width = "100%";
-      birthRow.style.justifyContent = "center";
-
-      const birthLabel = document.createElement("span");
-      birthLabel.className = "nationality-label birth-label";
-      birthLabel.textContent = "Nazione nascita:";
-      birthLabel.style.fontSize = "0.6rem";
-      birthLabel.style.fontWeight = "700";
-      birthLabel.style.textTransform = "uppercase";
-      birthLabel.style.letterSpacing = "0.5px";
-      birthLabel.style.color = "#64B5F6";
-      birthLabel.style.minWidth = "80px";
-      birthLabel.style.textAlign = "right";
-
-      const birthText = getBirthDisplay(player);
-      const birthFlags = getBirthFlags(player);
-
-      const birthValue = document.createElement("span");
-      birthValue.className = "nationality-value";
-      birthValue.style.display = "flex";
-      birthValue.style.alignItems = "center";
-      birthValue.style.gap = "4px";
-      birthValue.style.flexWrap = "wrap";
-
-      // Aggiungi bandiera di nascita
-      if (birthFlags.length > 0) {
-        birthValue.appendChild(
-          createFlagElement(
-            birthFlags[0],
-            birthText,
-            "flag-small",
-            `Nazione di nascita: ${birthText}`,
-          ),
-        );
-      }
-
-      // Aggiungi testo della nazione di nascita
-      const textSpan2 = document.createElement("span");
-      textSpan2.textContent = birthText;
-      textSpan2.style.color = "#000000";
-      textSpan2.style.fontSize = "0.8rem";
-      textSpan2.style.fontWeight = "500";
-      birthValue.appendChild(textSpan2);
-
-      birthRow.appendChild(birthLabel);
-      birthRow.appendChild(birthValue);
-      infoContainer.appendChild(birthRow);
-
-      nationalityEl.appendChild(infoContainer);
+      nationalityEl.replaceChildren(buildNationalityBlock(player));
     }
 
-    // --- GESTIONE CLICK PER APRIRE/CHIUDERE IL RETRO ---
-    let isFlipped = false;
-
-    const toggleCard = (e) => {
-      // Evita che il click su elementi interni causi problemi
-      if (e) e.stopPropagation();
-
-      isFlipped = !isFlipped;
-      card.classList.toggle("flipped", isFlipped);
+    // --- Apertura/chiusura del retro ---
+    const toggleCard = (event) => {
+      event?.stopPropagation();
+      card.classList.toggle("flipped");
     };
 
-    // Aggiungi event listener per click
     card.addEventListener("click", toggleCard);
-
-    // Supporto per tastiera (accessibilità)
-    card.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        toggleCard(e);
+    card.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        toggleCard(event);
       }
     });
-
-    // Aggiungi attributo per accessibilità
-    card.setAttribute("role", "button");
-    card.setAttribute("tabindex", "0");
     card.setAttribute("aria-label", `Mostra dettagli di ${player.nome}`);
 
     return card;
@@ -381,19 +290,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const term = searchTerm.toLowerCase();
     const filtered = players.filter((p) => {
-      const matchesRole = activeFilters.includes(p.ruolo);
-      if (!matchesRole) return false;
-
+      if (!activeFilters.includes(p.ruolo)) return false;
       if (term === "") return true;
 
-      if (p.nome.toLowerCase().includes(term)) return true;
-      if (p.numero_di_maglia.toString().includes(term)) return true;
-      if (p.cittadinanza?.toLowerCase().includes(term)) return true;
-      if (p.nazionalita_nascita?.toLowerCase().includes(term)) return true;
-      if (p.luogo_nascita?.toLowerCase().includes(term)) return true;
-      if (p.ruolo?.toLowerCase().includes(term)) return true;
-
-      return false;
+      return [
+        p.nome,
+        p.numero_di_maglia?.toString(),
+        p.cittadinanza,
+        p.nazionalita_nascita,
+        p.luogo_nascita,
+        p.ruolo,
+      ]
+        .filter(Boolean)
+        .some((field) => field.toLowerCase().includes(term));
     });
 
     if (filtered.length === 0) {
@@ -405,11 +314,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     DOM.noResults.classList.add("hidden");
 
-    const grouped = filtered.reduce((acc, p) => {
-      const role = p.ruolo || "Sconosciuto";
-      (acc[role] = acc[role] || []).push(p);
-      return acc;
-    }, {});
+    const grouped = Object.groupBy(filtered, (p) => p.ruolo || "Sconosciuto");
+    const fragment = document.createDocumentFragment();
 
     Object.keys(grouped)
       .sort((a, b) => ROLE_ORDER.indexOf(a) - ROLE_ORDER.indexOf(b))
@@ -417,80 +323,124 @@ document.addEventListener("DOMContentLoaded", () => {
         const section = document.createElement("section");
         section.className = "role-section";
         section.style.animationDelay = `${idx * 0.15}s`;
-        section.innerHTML = `<h2>${ROLE_PLURALS[role] || role}</h2><div class="role-cards"></div>`;
 
-        const cardsContainer = section.querySelector(".role-cards");
+        const heading = document.createElement("h2");
+        heading.textContent = ROLE_PLURALS[role] || role;
+        section.appendChild(heading);
+
+        const cardsContainer = document.createElement("div");
+        cardsContainer.className = "role-cards";
         grouped[role]
-          .sort((a, b) => a.numero_di_maglia - b.numero_di_maglia)
+          .sort((a, b) => Number(a.numero_di_maglia) - Number(b.numero_di_maglia))
           .forEach((player, i) =>
             cardsContainer.appendChild(createPlayerCard(player, i)),
           );
+        section.appendChild(cardsContainer);
 
-        DOM.roles.appendChild(section);
+        fragment.appendChild(section);
       });
+
+    DOM.roles.appendChild(fragment);
   };
 
   const updateFiltersUI = () => {
-    const allBtn = document.querySelector('[data-filter="all"]');
-    const allRoles = ["Portiere", "Difensore", "Centrocampista", "Attaccante"];
-    const allSelected = allRoles.every((r) => activeFilters.includes(r));
+    const allSelected = ALL_ROLES.every((r) => activeFilters.includes(r));
 
     DOM.filters.forEach((btn) => {
       const filter = btn.dataset.filter;
-      btn.classList.toggle(
-        "active",
-        filter === "all" ? allSelected : activeFilters.includes(filter),
-      );
-      btn.setAttribute(
-        "aria-pressed",
-        btn.classList.contains("active") ? "true" : "false",
-      );
+      const isActive =
+        filter === "all" ? allSelected : activeFilters.includes(filter);
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-pressed", isActive ? "true" : "false");
     });
+  };
+
+  const closeSuggestions = () => {
+    DOM.suggestions.classList.add("hidden");
+    DOM.search.setAttribute("aria-expanded", "false");
+    DOM.search.removeAttribute("aria-activedescendant");
+    selectedSuggestionIdx = -1;
   };
 
   const performSearch = () => {
     searchTerm = DOM.search.value.trim();
-    DOM.suggestions.classList.add("hidden");
+    closeSuggestions();
     renderPlayers();
   };
 
   const updateSuggestionSelection = () => {
     suggestionsList.forEach((s, i) => {
-      s.classList.toggle("selected", i === selectedSuggestionIdx);
-      if (i === selectedSuggestionIdx) s.scrollIntoView({ block: "nearest" });
+      const isSelected = i === selectedSuggestionIdx;
+      s.classList.toggle("selected", isSelected);
+      s.setAttribute("aria-selected", isSelected ? "true" : "false");
+      if (isSelected) {
+        s.scrollIntoView({ block: "nearest" });
+        DOM.search.setAttribute("aria-activedescendant", s.id);
+      }
     });
+    if (selectedSuggestionIdx === -1) {
+      DOM.search.removeAttribute("aria-activedescendant");
+    }
+  };
+
+  const buildSuggestionFlags = (player) => {
+    const wrap = document.createElement("span");
+    wrap.className = "suggestion-flags";
+
+    const citizenshipFlags = getCitizenshipFlags(player);
+    citizenshipFlags.forEach((f) => {
+      const img = createFlagElement(f, "Cittadinanza", "suggestion-flag", "Cittadinanza");
+      wrap.appendChild(img);
+    });
+
+    if (hasDualNationality(player)) {
+      const birthFlags = getBirthFlags(player).filter(
+        (f) => f !== citizenshipFlags[0],
+      );
+      birthFlags.forEach((f) => {
+        const img = createFlagElement(
+          f,
+          "Nazionalità di nascita",
+          "suggestion-flag is-birth-flag",
+          "Nazionalità di nascita",
+        );
+        wrap.appendChild(img);
+      });
+    }
+
+    return wrap;
   };
 
   const generateSuggestions = (query) => {
     if (query.length < 2) {
-      DOM.suggestions.classList.add("hidden");
+      closeSuggestions();
       return;
     }
 
     const q = query.toLowerCase();
-    const matches = players.filter((p) => {
-      if (p.nome.toLowerCase().includes(q)) return true;
-      if (p.numero_di_maglia.toString().includes(query)) return true;
-      if (p.cittadinanza?.toLowerCase().includes(q)) return true;
-      if (p.nazionalita_nascita?.toLowerCase().includes(q)) return true;
-      if (p.luogo_nascita?.toLowerCase().includes(q)) return true;
-      if (p.ruolo?.toLowerCase().includes(q)) return true;
-      return false;
-    });
+    const matches = players.filter((p) =>
+      [
+        p.nome,
+        p.numero_di_maglia?.toString(),
+        p.cittadinanza,
+        p.nazionalita_nascita,
+        p.luogo_nascita,
+        p.ruolo,
+      ]
+        .filter(Boolean)
+        .some((field) => field.toLowerCase().includes(q)),
+    );
 
     if (matches.length === 0) {
-      DOM.suggestions.classList.add("hidden");
+      closeSuggestions();
       return;
     }
 
     DOM.suggestions.innerHTML = "";
     suggestionsList = [];
 
-    const grouped = matches.reduce((acc, p) => {
-      const role = p.ruolo || "Altro";
-      (acc[role] = acc[role] || []).push(p);
-      return acc;
-    }, {});
+    const grouped = Object.groupBy(matches, (p) => p.ruolo || "Altro");
+    let optionIndex = 0;
 
     Object.keys(grouped)
       .sort((a, b) => ROLE_ORDER.indexOf(a) - ROLE_ORDER.indexOf(b))
@@ -503,53 +453,33 @@ document.addEventListener("DOMContentLoaded", () => {
         grouped[role].forEach((player) => {
           const item = document.createElement("div");
           item.className = "suggestion-item";
+          item.id = `suggestion-${optionIndex++}`;
           item.setAttribute("role", "option");
-          item.setAttribute("data-player-name", player.nome);
+          item.setAttribute("aria-selected", "false");
+          item.dataset.playerName = player.nome;
 
-          const hasDual = hasDualNationality(player);
-          let flagHTML = "";
+          const jersey = document.createElement("span");
+          jersey.className = "suggestion-jersey";
+          jersey.textContent = player.numero_di_maglia;
 
-          const citizenshipFlags = getCitizenshipFlags(player);
-          if (citizenshipFlags.length > 0) {
-            flagHTML += citizenshipFlags
-              .map(
-                (f) =>
-                  `<img src="${f}" class="suggestion-flag" style="width:20px;height:13px;object-fit:cover;border-radius:2px;margin-right:2px;" alt="Cittadinanza" loading="lazy" title="Cittadinanza">`,
-              )
-              .join("");
-          }
-
-          if (hasDual) {
-            const birthFlags = getBirthFlags(player);
-            if (
-              birthFlags.length > 0 &&
-              birthFlags[0] !== citizenshipFlags[0]
-            ) {
-              flagHTML += birthFlags
-                .map(
-                  (f) =>
-                    `<img src="${f}" class="suggestion-flag" style="width:20px;height:13px;object-fit:cover;border-radius:2px;margin-right:2px;opacity:0.7;" alt="Nascita" loading="lazy" title="Nazionalità di nascita">`,
-                )
-                .join("");
-            }
-          }
+          const name = document.createElement("span");
+          name.className = "suggestion-name";
+          name.textContent = player.nome;
 
           let nationalityText = getCitizenshipDisplay(player);
           const birthText = getBirthDisplay(player);
           if (birthText && birthText !== nationalityText) {
             nationalityText += ` (nato ${birthText})`;
           }
+          const nationality = document.createElement("span");
+          nationality.className = "suggestion-nationality";
+          nationality.textContent = nationalityText;
 
-          item.innerHTML = `
-            <span class="suggestion-jersey">${player.numero_di_maglia}</span>
-            <span class="suggestion-name">${player.nome}</span>
-            <span class="suggestion-nationality">${nationalityText}</span>
-            <span class="suggestion-flags">${flagHTML}</span>
-          `;
+          item.append(jersey, name, nationality, buildSuggestionFlags(player));
 
           item.addEventListener("click", () => {
             DOM.search.value = player.nome;
-            DOM.suggestions.classList.add("hidden");
+            closeSuggestions();
             performSearch();
           });
 
@@ -559,12 +489,15 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
     DOM.suggestions.classList.remove("hidden");
+    DOM.search.setAttribute("aria-expanded", "true");
     selectedSuggestionIdx = -1;
   };
 
-  // Event listeners
+  const debouncedSuggestions = debounce((value) => generateSuggestions(value));
+
+  // --- Ricerca ---
   DOM.search.addEventListener("input", (e) =>
-    generateSuggestions(e.target.value.trim()),
+    debouncedSuggestions(e.target.value.trim()),
   );
   DOM.search.addEventListener("focus", () => {
     const value = DOM.search.value.trim();
@@ -573,65 +506,55 @@ document.addEventListener("DOMContentLoaded", () => {
   DOM.searchBtn.addEventListener("click", performSearch);
 
   DOM.search.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && selectedSuggestionIdx === -1) performSearch();
+    const suggestionsOpen =
+      !DOM.suggestions.classList.contains("hidden") && suggestionsList.length;
 
-    if (
-      !DOM.suggestions.classList.contains("hidden") &&
-      suggestionsList.length
-    ) {
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        selectedSuggestionIdx = Math.min(
-          selectedSuggestionIdx + 1,
-          suggestionsList.length - 1,
-        );
-        updateSuggestionSelection();
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        selectedSuggestionIdx = Math.max(selectedSuggestionIdx - 1, -1);
-        updateSuggestionSelection();
-      } else if (e.key === "Enter" && selectedSuggestionIdx >= 0) {
-        e.preventDefault();
-        DOM.search.value =
-          suggestionsList[selectedSuggestionIdx].getAttribute(
-            "data-player-name",
-          );
-        DOM.suggestions.classList.add("hidden");
-        performSearch();
-      } else if (e.key === "Escape") {
-        DOM.suggestions.classList.add("hidden");
-      }
+    if (e.key === "Enter" && selectedSuggestionIdx === -1) {
+      performSearch();
+      return;
+    }
+
+    if (!suggestionsOpen) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      selectedSuggestionIdx = Math.min(
+        selectedSuggestionIdx + 1,
+        suggestionsList.length - 1,
+      );
+      updateSuggestionSelection();
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      selectedSuggestionIdx = Math.max(selectedSuggestionIdx - 1, -1);
+      updateSuggestionSelection();
+    } else if (e.key === "Enter" && selectedSuggestionIdx >= 0) {
+      e.preventDefault();
+      DOM.search.value = suggestionsList[selectedSuggestionIdx].dataset.playerName;
+      closeSuggestions();
+      performSearch();
+    } else if (e.key === "Escape") {
+      closeSuggestions();
     }
   });
 
   document.addEventListener("click", (e) => {
     if (!DOM.suggestions.contains(e.target) && e.target !== DOM.search) {
-      DOM.suggestions.classList.add("hidden");
+      closeSuggestions();
     }
   });
 
+  // --- Filtri per ruolo ---
   DOM.filters.forEach((btn) => {
     btn.addEventListener("click", () => {
       const filter = btn.dataset.filter;
-      const allBtn = document.querySelector('[data-filter="all"]');
-      const allRoles = [
-        "Portiere",
-        "Difensore",
-        "Centrocampista",
-        "Attaccante",
-      ];
 
       if (filter === "all") {
-        if (activeFilters.length === 4) {
-          activeFilters = [];
-        } else {
-          activeFilters = [...allRoles];
-        }
+        activeFilters = activeFilters.length === 4 ? [] : [...ALL_ROLES];
       } else if (activeFilters.includes(filter)) {
         activeFilters = activeFilters.filter((f) => f !== filter);
       } else {
         activeFilters.push(filter);
-        if (activeFilters.length === 4) activeFilters = [...allRoles];
+        if (activeFilters.length === 4) activeFilters = [...ALL_ROLES];
       }
 
       updateFiltersUI();
@@ -639,19 +562,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Carica i dati
-  DOM.loading.classList.remove("hidden");
-  fetch("player.json")
-    .then((res) =>
-      res.ok ? res.json() : Promise.reject(new Error("Risposta non valida")),
-    )
-    .then((data) => {
-      players = data;
+  // --- Caricamento dati ---
+  const init = async () => {
+    DOM.loading.classList.remove("hidden");
+    try {
+      const res = await fetch("player.json");
+      if (!res.ok) throw new Error("Risposta non valida");
+      players = await res.json();
       DOM.loading.classList.add("hidden");
       updateFiltersUI();
       renderPlayers();
-    })
-    .catch((err) => {
+    } catch (err) {
       console.error(err);
       DOM.loading.innerHTML = `
         <p>Non riusciamo a caricare la rosa. Verifica la connessione e riprova.</p>
@@ -660,5 +581,8 @@ document.addEventListener("DOMContentLoaded", () => {
       document
         .getElementById("retry-button")
         ?.addEventListener("click", () => location.reload());
-    });
+    }
+  };
+
+  init();
 });

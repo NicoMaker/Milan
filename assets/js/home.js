@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (comp.name === "Serie A") {
       if (logos.serieA?.[year]) return logos.serieA[year];
       const years = Object.keys(logos.serieA || {}).sort();
-      return years.length ? logos.serieA[years[years.length - 1]] : undefined;
+      return years.length ? logos.serieA[years.at(-1)] : undefined;
     }
     return logos.competitions?.[comp.name];
   };
@@ -129,9 +129,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const renderTimeline = (seasons, logos) => {
     DOM.timeline.innerHTML = "";
+    const fragment = document.createDocumentFragment();
     seasons.forEach((season, i) =>
-      DOM.timeline.appendChild(createEntry(season, i, logos)),
+      fragment.appendChild(createEntry(season, i, logos)),
     );
+    DOM.timeline.appendChild(fragment);
   };
 
   const showError = () => {
@@ -144,18 +146,25 @@ document.addEventListener("DOMContentLoaded", () => {
       .addEventListener("click", () => location.reload());
   };
 
-  const fetchJSON = (url) =>
-    fetch(url).then((res) =>
-      res.ok ? res.json() : Promise.reject(new Error("Risposta non valida")),
-    );
+  const fetchJSON = async (url) => {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Risposta non valida per ${url}`);
+    return res.json();
+  };
 
-  Promise.all([fetchJSON("data.json"), fetchJSON("assets/data/logos.json")])
-    .then(([data, logos]) => {
+  const init = async () => {
+    try {
+      const [data, logos] = await Promise.all([
+        fetchJSON("data.json"),
+        fetchJSON("assets/data/logos.json"),
+      ]);
       DOM.loading.classList.add("hidden");
       renderTimeline(data.seasons, logos);
-    })
-    .catch((err) => {
+    } catch (err) {
       console.error(err);
       showError();
-    });
+    }
+  };
+
+  init();
 });

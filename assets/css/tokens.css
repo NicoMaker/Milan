@@ -5,6 +5,8 @@
    ========================================================================== */
 
 :root {
+  color-scheme: dark;
+
   /* --- Colore --- */
   --color-red: #c8102e; /* rosso rossonero */
   --color-red-deep: #7a0c1f; /* rosso in ombra, per profondità */
@@ -14,7 +16,15 @@
   --color-gold: #c9a24b; /* oro anticato, riservato ai trofei */
   --color-grey: #9a9a9f; /* testo secondario su fondo scuro */
   --color-grey-dim: #56565b; /* testo secondario su fondo chiaro */
-  --color-line: rgba(242, 238, 227, 0.14);
+  --color-line: rgb(242 238 227 / 14%);
+  --color-focus-ring: color-mix(in srgb, var(--color-gold) 100%, white 0%);
+
+  /* Colori "semantici" derivati, usati per rimpiazzare gli stili inline */
+  --color-flag-citizenship: #fdb813;
+  --color-flag-birth: #64b5f6;
+  --surface-raised: color-mix(in srgb, var(--color-ivory) 6%, transparent);
+  --surface-raised-hover: color-mix(in srgb, var(--color-ivory) 10%, transparent);
+  --surface-accent: color-mix(in srgb, var(--color-red) 8%, transparent);
 
   /* --- Tipografia --- */
   --font-display: "Oswald", "Arial Narrow", sans-serif; /* titoli, insegne */
@@ -38,9 +48,9 @@
   --radius-pill: 999px;
 
   /* --- Profondità --- */
-  --shadow-card: 0 14px 34px rgba(0, 0, 0, 0.38);
-  --shadow-lift: 0 22px 48px rgba(0, 0, 0, 0.5);
-  --shadow-soft: 0 4px 14px rgba(0, 0, 0, 0.25);
+  --shadow-card: 0 14px 34px rgb(0 0 0 / 38%);
+  --shadow-lift: 0 22px 48px rgb(0 0 0 / 50%);
+  --shadow-soft: 0 4px 14px rgb(0 0 0 / 25%);
 
   /* --- Movimento --- */
   --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -60,17 +70,19 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-color: var(--color-grey-dim) transparent;
 }
 
 body {
   font-family: var(--font-body);
   background-color: var(--color-black);
   color: var(--color-ivory);
-  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  text-wrap: pretty;
 }
 
 img {
@@ -96,6 +108,13 @@ button {
 
 input {
   font-family: inherit;
+  accent-color: var(--color-red);
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
 }
 
 .visually-hidden {
@@ -103,12 +122,12 @@ input {
   width: 1px;
   height: 1px;
   overflow: hidden;
-  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
   white-space: nowrap;
 }
 
 :focus-visible {
-  outline: 3px solid var(--color-gold);
+  outline: 3px solid var(--color-focus-ring);
   outline-offset: 3px;
   border-radius: var(--radius-sm);
 }
@@ -137,4 +156,10 @@ input {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* --- Transizioni native tra pagine (progressive enhancement) ---
+   Ignorata dai browser che non supportano l'API: nessun impatto negativo. */
+@view-transition {
+  navigation: auto;
 }

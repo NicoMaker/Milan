@@ -1,12 +1,20 @@
 {
-  "seasons": [     
-    {  
-      "year": "2026-2027", 
+  "seasons": [
+    {
+      "year": "2026-2027",
       "position": "da definire",
       "competitions": [
-        { "name": "Serie A" }, 
-        { "name": "Coppa Italia", "winner": false },
-        { "name": "Europa League", "winner": false }
+        {
+          "name": "Serie A"
+        },
+        {
+          "name": "Coppa Italia",
+          "winner": false
+        },
+        {
+          "name": "Europa League",
+          "winner": false
+        }
       ],
       "link": "season/2026-2027/index.html"
     },
@@ -14,9 +22,17 @@
       "year": "2025-2026",
       "position": 5,
       "competitions": [
-        { "name": "Serie A" },
-        { "name": "Coppa Italia", "winner": false },
-        { "name": "Supercoppa Italiana", "winner": false }
+        {
+          "name": "Serie A"
+        },
+        {
+          "name": "Coppa Italia",
+          "winner": false
+        },
+        {
+          "name": "Supercoppa Italiana",
+          "winner": false
+        }
       ],
       "link": "season/2025-2026/index.html"
     },
@@ -24,10 +40,21 @@
       "year": "2024-2025",
       "position": 8,
       "competitions": [
-        { "name": "Serie A" },
-        { "name": "Champions League", "winner": false },
-        { "name": "Coppa Italia", "winner": false },
-        { "name": "Supercoppa Italiana", "winner": true }
+        {
+          "name": "Serie A"
+        },
+        {
+          "name": "Champions League",
+          "winner": false
+        },
+        {
+          "name": "Coppa Italia",
+          "winner": false
+        },
+        {
+          "name": "Supercoppa Italiana",
+          "winner": true
+        }
       ],
       "link": "season/2024-2025/index.html"
     }

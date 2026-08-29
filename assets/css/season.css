@@ -13,8 +13,9 @@ body {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(12, 12, 14, 0.9);
+  background: color-mix(in srgb, var(--color-black) 90%, transparent);
   backdrop-filter: blur(10px);
+  view-transition-name: site-header;
 }
 
 .site-header {
@@ -53,7 +54,8 @@ body {
   transition: color var(--dur-fast) var(--ease-out);
 }
 
-.back-link:hover {
+.back-link:hover,
+.back-link:focus-visible {
   color: var(--color-ivory);
 }
 
@@ -90,7 +92,7 @@ body {
   padding: 0 1rem;
   border: 1px solid var(--color-line);
   border-radius: var(--radius-pill) 0 0 var(--radius-pill);
-  background: rgba(242, 238, 227, 0.06);
+  background: var(--surface-raised);
   color: var(--color-ivory);
   font-size: 0.95rem;
 }
@@ -102,7 +104,7 @@ body {
 #search-input:focus {
   outline: none;
   border-color: var(--color-red);
-  background: rgba(242, 238, 227, 0.1);
+  background: var(--surface-raised-hover);
 }
 
 #search-button {
@@ -146,7 +148,7 @@ body {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-red-deep);
-  background: rgba(12, 12, 14, 0.05);
+  background: rgb(12 12 14 / 5%);
 }
 
 .suggestion-item {
@@ -160,7 +162,7 @@ body {
 
 .suggestion-item:hover,
 .suggestion-item.selected {
-  background: rgba(200, 16, 46, 0.08);
+  background: color-mix(in srgb, var(--color-red) 8%, transparent);
 }
 
 .suggestion-jersey {
@@ -174,6 +176,7 @@ body {
   color: var(--color-ivory);
   font-family: var(--font-numeral);
   font-size: 0.75rem;
+  flex-shrink: 0;
 }
 
 .suggestion-name {
@@ -181,11 +184,28 @@ body {
   font-size: 0.9rem;
 }
 
+.suggestion-nationality {
+  font-size: 0.75rem;
+  color: var(--color-grey-dim);
+  white-space: nowrap;
+}
+
+.suggestion-flags {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 .suggestion-flag {
-  width: 18px;
+  width: 20px;
   height: 13px;
   object-fit: cover;
   border-radius: 2px;
+  margin-right: 2px;
+}
+
+.suggestion-flag.is-birth-flag {
+  opacity: 0.7;
 }
 
 .filter-buttons {
@@ -225,6 +245,7 @@ main {
   max-width: 1180px;
   margin: 0 auto;
   padding: var(--space-lg) var(--space-sm) var(--space-xl);
+  container-type: inline-size;
 }
 
 .loading {
@@ -400,8 +421,8 @@ main {
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(12, 12, 14, 0.1) 0%,
-    rgba(12, 12, 14, 0.75) 78%
+    rgb(12 12 14 / 10%) 0%,
+    rgb(12 12 14 / 75%) 78%
   );
 }
 
@@ -422,14 +443,17 @@ main {
   z-index: 1;
 }
 
-.card-front h3 {
+.card-name {
   font-family: var(--font-display);
-  font-size: 1rem;
   font-weight: 600;
-  color: var(--color-ivory);
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
-  margin-bottom: 0.4rem;
   line-height: 1.15;
+}
+
+.card-front .card-name {
+  font-size: 1rem;
+  color: var(--color-ivory);
+  text-shadow: 0 2px 6px rgb(0 0 0 / 60%);
+  margin-bottom: 0.4rem;
 }
 
 .card-front .maglia {
@@ -439,8 +463,8 @@ main {
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: rgba(12, 12, 14, 0.55);
-  border: 1px solid rgba(242, 238, 227, 0.35);
+  background: rgb(12 12 14 / 55%);
+  border: 1px solid rgb(242 238 227 / 35%);
   color: var(--color-ivory);
   font-family: var(--font-numeral);
   font-size: 1.3rem;
@@ -462,9 +486,7 @@ main {
   transform: rotateY(180deg);
 }
 
-.card-back h3 {
-  font-family: var(--font-display);
-  font-weight: 600;
+.card-back .card-name {
   font-size: 1.05rem;
   color: var(--color-black);
   margin-bottom: 0.4rem;
@@ -487,19 +509,19 @@ main {
   font-weight: 600;
 }
 
-/* NAZIONALITÀ NEL RETRO */
+/* NAZIONALITÀ NEL RETRO — markup semantico, niente più stili inline via JS */
 .card-back .nationality {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
-  padding: 4px 0;
+  gap: 4px;
+  padding: 4px 0 2px;
   width: 100%;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-top: 1px solid rgb(0 0 0 / 6%);
   margin-top: 4px;
 }
 
-.card-back .nationality-row {
+.nationality-row {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -507,31 +529,31 @@ main {
   width: 100%;
 }
 
-.card-back .nationality-label {
+.nationality-label {
   font-size: 0.6rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #fdb813;
   min-width: 80px;
   flex-shrink: 0;
   text-align: right;
+  color: var(--color-flag-citizenship);
 }
 
-.card-back .nationality-label.birth-label {
-  color: #64b5f6;
+.nationality-label.is-birth {
+  color: var(--color-flag-birth);
 }
 
-.card-back .nationality-value {
+.nationality-value {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.8rem;
+  flex-wrap: wrap;
   color: var(--color-black);
 }
 
-.card-back .nationality-value span {
-  color: var(--color-black) !important;
+.nationality-value .nationality-text {
+  color: var(--color-black);
   font-weight: 500;
   font-size: 0.8rem;
 }
@@ -541,8 +563,8 @@ main {
   height: 15px;
   object-fit: cover;
   border-radius: 2px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
+  border: 1px solid rgb(0 0 0 / 8%);
 }
 
 .card-back .role {
@@ -552,7 +574,7 @@ main {
   color: var(--color-red);
   font-weight: 700;
   padding: 3px 12px;
-  background: rgba(200, 16, 46, 0.08);
+  background: color-mix(in srgb, var(--color-red) 8%, transparent);
   border-radius: 12px;
   margin-top: 6px;
 }
@@ -588,17 +610,14 @@ main {
     transform var(--dur-fast) var(--ease-out);
 }
 
-.social-links a:hover {
+.social-links a:hover,
+.social-links a:focus-visible {
   color: var(--color-red);
   transform: translateY(-2px);
 }
 
-/* --- Responsive --- */
-@media (max-width: 768px) {
-  .site-header h1 {
-    font-size: 1.05rem;
-  }
-
+/* --- Responsive (container queries sul <main>, con fallback a media query) --- */
+@container (max-width: 768px) {
   .role-cards {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-sm);
@@ -613,18 +632,24 @@ main {
     height: 76px;
   }
 
-  .card-back .nationality-label {
+  .nationality-label {
     font-size: 0.55rem;
     min-width: 65px;
   }
 
-  .card-back .nationality-value span {
+  .nationality-value .nationality-text {
     font-size: 0.7rem;
   }
 
   .card-back .flag-small {
     width: 18px;
     height: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .site-header h1 {
+    font-size: 1.05rem;
   }
 }
 
@@ -648,7 +673,7 @@ main {
     font-size: 1rem;
   }
 
-  .card-back h3 {
+  .card-back .card-name {
     font-size: 0.85rem;
   }
 
@@ -656,12 +681,12 @@ main {
     font-size: 0.65rem;
   }
 
-  .card-back .nationality-label {
+  .nationality-label {
     font-size: 0.5rem;
     min-width: 55px;
   }
 
-  .card-back .nationality-value span {
+  .nationality-value .nationality-text {
     font-size: 0.65rem;
   }
 
