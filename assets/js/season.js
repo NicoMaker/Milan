@@ -126,12 +126,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const hasDualNationality = (player) =>
     Boolean(
       player.cittadinanza &&
-        player.nazionalita_nascita &&
-        player.cittadinanza !== player.nazionalita_nascita,
+      player.nazionalita_nascita &&
+      player.cittadinanza !== player.nazionalita_nascita,
     );
 
   // --- Crea elemento bandiera ---
-  const createFlagElement = (flagUrl, label, className = "flag", title = "") => {
+  const createFlagElement = (
+    flagUrl,
+    label,
+    className = "flag",
+    title = "",
+  ) => {
     const flagImg = document.createElement("img");
     flagImg.src = flagUrl;
     flagImg.alt = label || "Bandiera";
@@ -362,7 +367,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const cardsContainer = document.createElement("div");
         cardsContainer.className = "role-cards";
         grouped[role]
-          .sort((a, b) => Number(a.numero_di_maglia) - Number(b.numero_di_maglia))
+          .sort(
+            (a, b) => Number(a.numero_di_maglia) - Number(b.numero_di_maglia),
+          )
           .forEach((player, i) =>
             cardsContainer.appendChild(createPlayerCard(player, i)),
           );
@@ -420,7 +427,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const citizenshipFlags = getCitizenshipFlags(player);
     citizenshipFlags.forEach((f) => {
-      const img = createFlagElement(f, "Cittadinanza", "suggestion-flag", "Cittadinanza");
+      const img = createFlagElement(
+        f,
+        "Cittadinanza",
+        "suggestion-flag",
+        "Cittadinanza",
+      );
       wrap.appendChild(img);
     });
 
@@ -560,7 +572,8 @@ document.addEventListener("DOMContentLoaded", () => {
       updateSuggestionSelection();
     } else if (e.key === "Enter" && selectedSuggestionIdx >= 0) {
       e.preventDefault();
-      DOM.search.value = suggestionsList[selectedSuggestionIdx].dataset.playerName;
+      DOM.search.value =
+        suggestionsList[selectedSuggestionIdx].dataset.playerName;
       closeSuggestions();
       performSearch();
     } else if (e.key === "Escape") {

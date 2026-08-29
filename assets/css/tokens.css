@@ -23,7 +23,11 @@
   --color-flag-citizenship: #fdb813;
   --color-flag-birth: #64b5f6;
   --surface-raised: color-mix(in srgb, var(--color-ivory) 6%, transparent);
-  --surface-raised-hover: color-mix(in srgb, var(--color-ivory) 10%, transparent);
+  --surface-raised-hover: color-mix(
+    in srgb,
+    var(--color-ivory) 10%,
+    transparent
+  );
   --surface-accent: color-mix(in srgb, var(--color-red) 8%, transparent);
 
   /* --- Tipografia --- */
