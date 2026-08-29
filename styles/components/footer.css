@@ -1,0 +1,35 @@
+/* ==========================================================================
+   COMPONENT — Footer del sito (condiviso Home + Season)
+   ========================================================================== */
+
+/* --- Footer --- */
+.site-footer {
+  border-top: 1px solid var(--color-line);
+  padding: var(--space-md);
+  text-align: center;
+}
+
+.site-footer p {
+  color: var(--color-grey);
+  font-size: 0.85rem;
+  margin-bottom: var(--space-xs);
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+}
+
+.social-links a {
+  color: var(--color-grey);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.social-links a:hover,
+.social-links a:focus-visible {
+  color: var(--color-red);
+  transform: translateY(-2px);
+}

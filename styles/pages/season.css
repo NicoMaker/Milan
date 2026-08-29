@@ -1,0 +1,23 @@
+/* ==========================================================================
+   PAGE — Season: sfondo e layout del main
+   ========================================================================== */
+
+/* ==========================================================================
+   SEASON — Rosa di stagione
+   Le card sono "cartellini": il fronte porta la texture a righe della
+   maglia rossonera, il retro è la scheda ufficiale del giocatore.
+   ========================================================================== */
+
+body {
+  background: linear-gradient(180deg, #14141a 0%, var(--color-black) 340px);
+}
+
+/* --- Main --- */
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-sm) var(--space-xl);
+  container-type: inline-size;
+}

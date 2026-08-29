@@ -1,0 +1,27 @@
+/* ==========================================================================
+   PAGE — Home: sfondo e layout del main
+   ========================================================================== */
+
+/* ==========================================================================
+   HOME — Archivio Rose A.C. Milan
+   Struttura a "diario di bordo": una linea del tempo verticale, perché
+   il contenuto è per natura una sequenza di stagioni.
+   ========================================================================== */
+
+body {
+  background-color: var(--color-black);
+  background-image: radial-gradient(
+    ellipse 900px 500px at 50% -10%,
+    color-mix(in srgb, var(--color-red) 25%, transparent),
+    transparent 65%
+  );
+}
+
+/* --- Main --- */
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-sm) var(--space-xl);
+}

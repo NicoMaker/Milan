@@ -1,0 +1,79 @@
+/* ==========================================================================
+   COMPONENT — Stati di caricamento, errore, nessun risultato
+   ========================================================================== */
+
+/* --- Loading & error --- */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl) 0;
+  color: var(--color-grey);
+}
+
+.spinner {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 3px solid var(--color-line);
+  border-top-color: var(--color-red);
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.retry-button {
+  margin-top: var(--space-xs);
+  padding: 0.7rem 1.6rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-red);
+  color: var(--color-ivory);
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.retry-button:hover {
+  background: var(--color-red-deep);
+}
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl) 0;
+  color: var(--color-grey);
+}
+
+.spinner {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 3px solid var(--color-line);
+  border-top-color: var(--color-red);
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.no-results {
+  text-align: center;
+  padding: var(--space-xl) 0;
+  color: var(--color-grey);
+  font-size: 1.05rem;
+}
+
+.retry-button {
+  margin-top: var(--space-sm);
+}

@@ -1,0 +1,120 @@
+/* ==========================================================================
+   RESPONSIVE — Season
+   ========================================================================== */
+
+/* --- Responsive (container queries sul <main>, con fallback a media query) --- */
+@container (max-width: 768px) {
+  .role-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+  }
+
+  .card {
+    height: 260px;
+  }
+
+  .card-front .card-img {
+    width: 76px;
+    height: 76px;
+  }
+
+  .citizenship-flag-front,
+  .birth-flag-front {
+    width: 22px;
+    height: 15px;
+  }
+
+  .birth-flag-front {
+    right: 17px;
+  }
+
+  .nationality-label {
+    font-size: 0.55rem;
+    min-width: 65px;
+  }
+
+  .nationality-value .nationality-text {
+    font-size: 0.7rem;
+  }
+
+  .card-back .flag-small {
+    width: 18px;
+    height: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .site-header h1 {
+    font-size: 1.05rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .back-link span {
+    display: none;
+  }
+
+  .card {
+    height: 240px;
+  }
+
+  .card-front .card-img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .citizenship-flag-front,
+  .birth-flag-front {
+    width: 18px;
+    height: 12px;
+  }
+
+  .citizenship-flag-front {
+    right: -3px;
+    bottom: -1px;
+  }
+
+  .birth-flag-front {
+    right: 14px;
+    bottom: -1px;
+  }
+
+  .card-front .maglia {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  .card-back .maglia {
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
+  }
+
+  .card-back .card-name {
+    font-size: 0.85rem;
+  }
+
+  .card-back .birth-date {
+    font-size: 0.65rem;
+  }
+
+  .nationality-label {
+    font-size: 0.5rem;
+    min-width: 55px;
+  }
+
+  .nationality-value .nationality-text {
+    font-size: 0.65rem;
+  }
+
+  .card-back .flag-small {
+    width: 16px;
+    height: 11px;
+  }
+
+  .card-back .role {
+    font-size: 0.6rem;
+    padding: 2px 10px;
+  }
+}
