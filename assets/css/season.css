@@ -441,9 +441,9 @@ main {
   box-shadow: var(--shadow-soft);
 }
 
-.citizenship-flag-front {
+.citizenship-flag-front,
+.birth-flag-front {
   position: absolute;
-  right: -4px;
   bottom: -2px;
   width: 26px;
   height: 18px;
@@ -453,7 +453,18 @@ main {
   box-shadow: var(--shadow-soft);
 }
 
-.citizenship-flag-front.hidden {
+.citizenship-flag-front {
+  right: -4px;
+}
+
+.birth-flag-front {
+  right: 20px;
+  border-color: var(--color-flag-birth);
+  opacity: 0.92;
+}
+
+.citizenship-flag-front.hidden,
+.birth-flag-front.hidden {
   display: none;
 }
 
@@ -600,7 +611,18 @@ main {
 
 /* NASCONDI IL NUMERO DI MAGLIA NEL RETRO */
 .card-back .maglia {
-  display: none !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  margin-top: var(--space-2xs);
+  background: var(--color-black);
+  color: var(--color-ivory);
+  font-family: var(--font-numeral);
+  font-size: 1.05rem;
+  box-shadow: var(--shadow-soft);
 }
 
 /* --- Footer --- */
@@ -651,9 +673,14 @@ main {
     height: 76px;
   }
 
-  .citizenship-flag-front {
+  .citizenship-flag-front,
+  .birth-flag-front {
     width: 22px;
     height: 15px;
+  }
+
+  .birth-flag-front {
+    right: 17px;
   }
 
   .nationality-label {
@@ -691,10 +718,19 @@ main {
     height: 60px;
   }
 
-  .citizenship-flag-front {
+  .citizenship-flag-front,
+  .birth-flag-front {
     width: 18px;
     height: 12px;
+  }
+
+  .citizenship-flag-front {
     right: -3px;
+    bottom: -1px;
+  }
+
+  .birth-flag-front {
+    right: 14px;
     bottom: -1px;
   }
 
@@ -702,6 +738,12 @@ main {
     width: 32px;
     height: 32px;
     font-size: 1rem;
+  }
+
+  .card-back .maglia {
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
   }
 
   .card-back .card-name {

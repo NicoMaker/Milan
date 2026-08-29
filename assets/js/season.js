@@ -237,14 +237,30 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    // Bandierina della nazione di nascita, accanto a quella di cittadinanza
+    const birthFlagFront = card.querySelector(".birth-flag-front");
+    if (birthFlagFront) {
+      const birthUrl = getBirthFlags(player)[0];
+      const birthText = getBirthDisplay(player);
+      if (birthUrl) {
+        birthFlagFront.src = birthUrl;
+        birthFlagFront.alt = `Nazione di nascita: ${birthText}`;
+        birthFlagFront.title = `Nazione di nascita: ${birthText}`;
+        withFallback(birthFlagFront, birthText);
+      } else {
+        birthFlagFront.classList.add("hidden");
+      }
+    }
+
     // Nome giocatore (fronte + retro)
     card.querySelectorAll(".card-name").forEach((el) => {
       el.textContent = player.nome;
     });
 
-    // Numero maglia
-    const magliaEl = card.querySelector(".maglia");
-    if (magliaEl) magliaEl.textContent = player.numero_di_maglia;
+    // Numero maglia (fronte e retro)
+    card.querySelectorAll(".maglia").forEach((el) => {
+      el.textContent = player.numero_di_maglia;
+    });
 
     // Data di nascita + età
     const birthSpan = card.querySelector(".birth-date");
