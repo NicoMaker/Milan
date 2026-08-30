@@ -3,7 +3,7 @@ Object.assign(MilanSeasonApp.prototype, {
   async loadData() {
     this.DOM.loading.classList.remove("hidden");
     try {
-      const res = await fetch("player.json");
+      const res = await fetch(this.playersUrl);
       if (!res.ok) throw new Error("Risposta non valida");
       this.players = await res.json();
       this.DOM.loading.classList.add("hidden");

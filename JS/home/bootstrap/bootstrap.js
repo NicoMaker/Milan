@@ -19,8 +19,8 @@ Object.assign(MilanHomeApp.prototype, {
   async loadData() {
     try {
       const [data, logos] = await Promise.all([
-        this.fetchJSON("data.json"),
-        this.fetchJSON("assets/data/logos.json"),
+        this.fetchJSON("JSON/data.json"),
+        this.fetchJSON("JSON/logos.json"),
       ]);
       this.DOM.loading.classList.add("hidden");
       this.renderTimeline(data.seasons, logos);

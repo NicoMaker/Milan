@@ -12,6 +12,11 @@ class MilanSeasonApp {
       filters: document.querySelectorAll(".filter-btn"),
     };
 
+    // Percorso del file JSON della rosa (impostato in JSON/<stagione>/)
+    this.playersUrl = document
+      .getElementById("playerdata")
+      .getAttribute("link");
+
     this.players = [];
     this.activeFilters = [
       "Portiere",
